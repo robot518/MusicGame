@@ -1,4 +1,4 @@
-var SPEED = 100;
+var SPEED = 80;
 
 cc.Class({
     extends: cc.Component,
@@ -10,7 +10,7 @@ cc.Class({
         ndMap: cc.Node,
         _audioTask: null,
         _audioID: null,
-        _gameStatus: 0, // 0准备，1开始，2结束
+        _gameStatus: 0, // 0准备，1开始，2结束, 3中止
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -27,15 +27,39 @@ cc.Class({
     update (dt) {
         if (this._gameStatus == 1){
             var dx = this.speed * dt;
-            this.ndPlayer.x += dx;
             var dy = SPEED/2 * dt;
+            this.ndPlayer.x += dx;
             this.ndPlayer.y += dy;
             this.ndMap.x -= 2*dx;
             this.ndMap.y -= 2*dy;
-            // var pos = this._getTilePos(cc.v2(this.ndPlayer.x, this.ndPlayer.y));
-            // var id = this._layerFloor.getTileGIDAt(pos);
-            // cc.log(pos.x, pos.y, id);
-            // if (id == 0) this.gameOver();
+            var pos = this._getTilePos(cc.v2(this.ndPlayer.x, this.ndPlayer.y));
+            if (pos.x == 0 && pos.y == 1) {
+                this.gameOver();
+            } else {
+                var id = this._layerFloor.getTileGIDAt(pos);
+                // cc.log(pos.x, pos.y, id);
+                if (id == 0) {
+                    this.iCount++;
+                    var p = this._getNewPos();
+                    this.ndPlayer.x += p.x;
+                    this.ndPlayer.y += p.y;
+                    this.ndMap.x -= 2*p.x;
+                    this.ndMap.y -= 2*p.y;
+
+                    // this.ndPlayer.x -= 5*dx;
+                    // this.speed = -this.speed;
+                    // this.ndPlayer.scaleX = -this.ndPlayer.scaleX;
+                    this._gameStatus = 3;
+                    // this._bTouch = false;
+                    // this.ndPlayer.opacity = 0;
+                    // var finished = cc.callFunc(function (argument) {
+                    //     this._bTouch = true;
+                    //     this.ndPlayer.opacity = 255;
+                    // }, this);
+                    // var seq = cc.sequence(cc.delayTime(1.2), finished);
+                    // this.ndPlayer.runAction(seq);
+                }
+            }
         }
     },
 
@@ -64,11 +88,9 @@ cc.Class({
             else if (this._gameStatus == 1){
                 this.speed = -this.speed;
                 this.ndPlayer.scaleX = -this.ndPlayer.scaleX;
+            } else if (this._gameStatus == 3){
+                this._gameStatus = 1;
             }
-        }, this);
-        cc.find("test", this.node).on("click", function (argument) {
-            this.gameOver();
-            // this.ndPlayer.setPosition(cc.v2(8.5, -210));
         }, this);
         cc.find("back", this.ndResult).on("click", function (argument) {
             this.stopAudio();
@@ -78,12 +100,11 @@ cc.Class({
 
     initShow(){
         this.ndBtn.active = true;
-        cc.find("test", this.node).active = false;
         this.ndResult.active = false;
     },
 
-    showCount(iCount){
-        cc.find("lab", this.ndResult).getComponent(cc.Label).string = iCount.toString();
+    showCount(){
+        cc.find("times", this.ndResult).getComponent(cc.Label).string = this.iCount.toString();
     },
 
     gameStart(){
@@ -93,20 +114,22 @@ cc.Class({
         var anim = this.ndPlayer.getComponent(cc.Animation);
         anim.play();
         this._gameStatus = 1;
-        // var para = Math.random() >= 0.5 ? 1 : -1;
+        this.iCount = 0;
+        this.idx = 0;
+        this.LvData = [[0,1],[6,7],[-5,18],[3,26],[-2,31],[3,36],[-3,42],[3,48],[0,51],[4,55],[-4,63],[4,71],[-2,77],[3,82],[-1,86],[2,89],[-1,92],[2,95],[-1,98]];
         var para = 1;
         if (para > 0) this.ndPlayer.scaleX = -this.ndPlayer.scaleX;
         this.speed = para*SPEED;
-        cc.find("test", this.node).active = true;
         this.playAudio();
     },
 
     gameOver(){
         this._gameStatus = 2;
-        // this.ndResult.active = true;
-        // this.ndMap.active = false;
         var anim = this.ndPlayer.getComponent(cc.Animation);
         anim.stop();
+        this.ndResult.active = true;
+        this.ndMap.active = false;
+        this.showCount();
     },
 
     playAudio () {
@@ -124,17 +147,77 @@ cc.Class({
         cc.audioEngine.play(url, false);
     },
 
+    _getNewPos(){
+        var mapSize = this.ndMap.getContentSize();
+        var tileSize = this._tiledMap.getTileSize();
+        var dx = 0, dy = 1;
+        var curY = Math.floor(2*(this.ndPlayer.y+mapSize.height/2)/tileSize.height);
+        for (var i = this.idx; i < this.LvData.length; i++) {
+            if (curY <= this.LvData[i][1]){
+                this.idx = i;
+                dx = this.LvData[this.idx][0];
+                dy = this.LvData[this.idx][1];
+                break;
+            }
+        };
+        var x = tileSize.width/2*dx;
+        var px = x-this.ndPlayer.x;
+        var y = tileSize.height/2*dy-mapSize.height/2;
+        var py = y-this.ndPlayer.y;
+        // cc.log(x, y, px, py, curY, this.idx, this.ndPlayer.x, this.ndPlayer.y);
+        return cc.v2(px, py);
+    },
+
     _getTilePos(posInPixel) {
         var mapSize = this.ndMap.getContentSize();
         var tileSize = this._tiledMap.getTileSize();
-        var x = Math.floor(posInPixel.x / tileSize.width);
-        var y = Math.floor((mapSize.height - posInPixel.y) / tileSize.height);
         var multi = tileSize.width/tileSize.height;
-
-        // Math.abs(posInPixel.x*tileSize.height/2)+Math.abs(posInPixel.y*tileSize.width/2)<tileSize.height*tileSize.width/4;
-        var m = (posInPixel.x+multi*(mapSize.height-posInPixel.y)-mapSize.width/2-multi*tileSize.height/2)/(multi*tileSize.height);
-        var n = (multi*(mapSize.height-posInPixel.y)-posInPixel.x+mapSize.width/2-multi*tileSize.height/2)/(multi*tileSize.height);
-        cc.log(mapSize.height, mapSize.width, tileSize.height, tileSize.width, x, y, posInPixel.x, posInPixel.y, m, n);
-        return cc.v2(x, y);
+        posInPixel.x += mapSize.width/2;
+        posInPixel.y += mapSize.height/2;
+        var x = Math.floor(posInPixel.x / tileSize.width)*tileSize.width;
+        var y = Math.floor((mapSize.height - posInPixel.y) / tileSize.height)*tileSize.height;
+        var px = 0, py = 0; //将坐标转换成所在菱形的中点
+        var nx = posInPixel.x-x;
+        var ny = mapSize.height-posInPixel.y-y;
+        if (ny <= tileSize.height-1/multi*nx){
+            if (ny <= 1/multi*nx){
+                px = x+tileSize.width/2;
+                py = y;
+            }else{
+                px = x;
+                py = y+tileSize.height/2;
+            }
+        }else{
+            if (ny <= 1/multi*nx){
+                px = x+tileSize.width;
+                py = y+tileSize.height/2;
+            }else{
+                px = x+tileSize.width/2;
+                py = y+tileSize.height;
+            }
+        }
+        var m = (px+multi*py-mapSize.width/2-multi*tileSize.height/2)/(multi*tileSize.height);
+        var n = (multi*py-px+mapSize.width/2-multi*tileSize.height/2)/(multi*tileSize.height);
+        // cc.log(posInPixel.x, posInPixel.y, x, y, px, py, m, n);
+        return cc.v2(m, n);
     },
+
+    // onCreateTileMap (url) {
+    //     cc.loader.loadRes(url, cc.TiledMapAsset, (err, tmxAsset) => {
+    //         if (err) {
+    //             cc.error(err);
+    //             return;
+    //         }
+    //         // this.ndMap.destroyAllChildren();
+    //         var node = new cc.Node();
+    //         this.ndMap.addChild(node);
+    //         var tileMap = node.addComponent(cc.TiledMap);
+    //         tileMap.tmxAsset = tmxAsset;
+    //         this.ndPlayer.parent = node;
+    //         // node.addChild(this.ndPlayer);
+    //         // this.ndPlayer.zIndex = 1;
+    //         // this.ndPlayer.position = cc.v2(2500, 25);
+    //         cc.log(this.ndPlayer);
+    //     });
+    // },
 });

@@ -158,7 +158,10 @@ cc.Class({
         }
         this.labLoad.string = "下载完成";
         cc.director.loadScene("Level", function (err, scene) {
-            scene.getChildByName("Canvas").getComponent("Level")._audioTask = res;
+            var obj = scene.getChildByName("Canvas").getComponent("Level");
+            obj._audioTask = res;
+            // var url = 'map/Lv1Map';
+            // obj.onCreateTileMap(url);
         });
     },
 
