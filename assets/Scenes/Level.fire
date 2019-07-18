@@ -1613,31 +1613,31 @@
     "_id": "e3uNWfBN5PLI8xx7ALEEUr"
   },
   {
-    "__type__": "f7a71TmVnpPN4wU/jlHfXNo",
+    "__type__": "a3752/p6xlM/a0lIOQX6qYt",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 2
     },
     "_enabled": true,
-    "ndBtn": {
-      "__id__": 7
-    },
-    "ndResult": {
-      "__id__": 12
-    },
     "ndPlayer": {
       "__id__": 27
     },
     "ndMap": {
       "__id__": 24
     },
+    "ndResult": {
+      "__id__": 12
+    },
+    "ndBtn": {
+      "__id__": 7
+    },
     "labTime": {
       "__id__": 34
     },
-    "_audioTask": null,
-    "_audioID": null,
-    "_gameStatus": 0,
-    "_id": "ddHOJhrbBGQLt9pxYHPoQu"
+    "audioClick": {
+      "__uuid__": "ec5bd511-ae0f-4f1d-b0db-e2a960f83663"
+    },
+    "_id": "a8E4VZcJVMjr7zgZuYoUI6"
   }
 ]
