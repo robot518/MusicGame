@@ -1,5 +1,5 @@
 const {ccclass, property} = cc._decorator;
-var SPEED = 150;
+var SPEED = 80;
 
 @ccclass
 export default class Level extends cc.Component {
@@ -75,6 +75,11 @@ export default class Level extends cc.Component {
     }
 
     initCanvas(){
+        // cc.view.setDesignResolutionSize(720, 1280, cc.ResolutionPolicy.SHOW_ALL);
+        // let srcScaleForShowAll = Math.min(cc.view.getCanvasSize().width / this.node.width, cc.view.getCanvasSize().height / this.node.height);
+        // let realWidth = this.node.width * srcScaleForShowAll;
+        // let realHeight = this.node.height * srcScaleForShowAll;
+        // this.node.scale = Math.max(cc.view.getCanvasSize().width / realWidth, cc.view.getCanvasSize().height / realHeight);
         var canvas = this.node.getComponent(cc.Canvas);
         var size = canvas.designResolution;
         var cSize = cc.view.getFrameSize();
@@ -85,11 +90,11 @@ export default class Level extends cc.Component {
             canvas.fitWidth = true;
             canvas.fitHeight = false;
         }
-        // canvas.alignWithScreen();
     }
 
     initParas(){
         this._gameStatus = 0;
+        this.iLv = 1;
         this._tiledMap = this.ndMap.getComponent('cc.TiledMap');
     }
 
@@ -136,7 +141,7 @@ export default class Level extends cc.Component {
         this.LvData = [[0,1],[6,7],[-5,18],[3,26],[-2,31],[3,36],[-3,42],[3,48],[0,51],[4,55],[-4,63],[4,71],[-2,77],[3,82],[-1,86],[2,89],[-1,92],[2,95],[-1,98]];
         // var para = 1;
         // if (para > 0) 
-        this.ndPlayer.scaleX = -this.ndPlayer.scaleX;
+        // this.ndPlayer.scaleX = -this.ndPlayer.scaleX;
         // this._speed = para*SPEED;
         this._speed = SPEED;
         this.playAudio();

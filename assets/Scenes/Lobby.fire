@@ -515,7 +515,7 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": -257,
+      "x": -256.9999999999999,
       "y": 66,
       "z": 0
     },
@@ -781,7 +781,7 @@
     "_position": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -230,
+      "y": -229.99999999999994,
       "z": 0
     },
     "_scale": {
@@ -6238,7 +6238,9 @@
     "labLoad": {
       "__id__": 124
     },
-    "audioClick": null,
+    "audioClick": {
+      "__uuid__": "ec5bd511-ae0f-4f1d-b0db-e2a960f83663"
+    },
     "_id": "20RWDuw9pHzIefYbggzo5E"
   }
 ]
