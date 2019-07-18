@@ -49,7 +49,7 @@ cc.Class({
 
     initShow(){
         this.ndLoad.active = false;
-        this.showScv(1);
+        this.showScv();
     },
 
     initVideoAd(){
@@ -97,12 +97,16 @@ cc.Class({
         })
     },
 
-    showScv(iCount){
+    showScv(){
+        // cc.sys.localStorage.setItem("level", 1);
+        var count = cc.sys.localStorage.getItem("level") || 1;
+        cc.log("count = ", count);
         var children = this.ndItems.children;
         for (let i = 0; i < 4; i++) {
             cc.find("play", children[i]).on("click", function (argument) {
                 this.playSound("click");
-                if (i < iCount){
+                if (i < count){
+                    this.iLv = i+1;
                     this.loadMusic();
                 } else {
                     // this.showVideo();
@@ -157,9 +161,11 @@ cc.Class({
             return;
         }
         this.labLoad.string = "下载完成";
+        var lv = this.iLv;
         cc.director.loadScene("Level", function (err, scene) {
             var obj = scene.getChildByName("Canvas").getComponent("Level");
             obj._audioTask = res;
+            obj.iLv = lv;
             // var url = 'map/Lv1Map';
             // obj.onCreateTileMap(url);
         });

@@ -516,7 +516,7 @@
     "_position": {
       "__type__": "cc.Vec3",
       "x": -257,
-      "y": 155,
+      "y": 66,
       "z": 0
     },
     "_scale": {
@@ -579,7 +579,7 @@
     "_position": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -89,
+      "y": 0,
       "z": 0
     },
     "_scale": {
@@ -643,8 +643,8 @@
     "_alignFlags": 45,
     "_left": 0,
     "_right": 0,
-    "_top": 89,
-    "_bottom": -89,
+    "_top": 0,
+    "_bottom": 0,
     "_verticalCenter": 0,
     "_horizontalCenter": 0,
     "_isAbsLeft": true,
@@ -1134,7 +1134,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 97.87,
+      "width": 22.25,
       "height": 40
     },
     "_anchorPoint": {
@@ -1177,8 +1177,8 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_string": "Label",
-    "_N$string": "Label",
+    "_string": "1",
+    "_N$string": "1",
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,
@@ -1932,7 +1932,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 97.87,
+      "width": 22.25,
       "height": 40
     },
     "_anchorPoint": {
@@ -1975,8 +1975,8 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_string": "Label",
-    "_N$string": "Label",
+    "_string": "2",
+    "_N$string": "2",
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,
@@ -2730,7 +2730,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 97.87,
+      "width": 22.25,
       "height": 40
     },
     "_anchorPoint": {
@@ -2773,8 +2773,8 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_string": "Label",
-    "_N$string": "Label",
+    "_string": "3",
+    "_N$string": "3",
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,
@@ -3528,7 +3528,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 97.87,
+      "width": 22.25,
       "height": 40
     },
     "_anchorPoint": {
@@ -3571,8 +3571,8 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_string": "Label",
-    "_N$string": "Label",
+    "_string": "4",
+    "_N$string": "4",
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,
@@ -4326,7 +4326,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 97.87,
+      "width": 22.25,
       "height": 40
     },
     "_anchorPoint": {
@@ -4369,8 +4369,8 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_string": "Label",
-    "_N$string": "Label",
+    "_string": "5",
+    "_N$string": "5",
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,
@@ -5124,7 +5124,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 97.87,
+      "width": 22.25,
       "height": 40
     },
     "_anchorPoint": {
@@ -5167,8 +5167,8 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_string": "Label",
-    "_N$string": "Label",
+    "_string": "6",
+    "_N$string": "6",
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,

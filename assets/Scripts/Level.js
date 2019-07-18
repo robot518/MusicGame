@@ -1,4 +1,4 @@
-var SPEED = 80;
+var SPEED = 150;
 
 cc.Class({
     extends: cc.Component,
@@ -8,6 +8,7 @@ cc.Class({
         ndResult: cc.Node,
         ndPlayer: cc.Node,
         ndMap: cc.Node,
+        labTime: cc.Label,
         _audioTask: null,
         _audioID: null,
         _gameStatus: 0, // 0准备，1开始，2结束, 3中止
@@ -45,19 +46,7 @@ cc.Class({
                     this.ndPlayer.y += p.y;
                     this.ndMap.x -= 2*p.x;
                     this.ndMap.y -= 2*p.y;
-
-                    // this.ndPlayer.x -= 5*dx;
-                    // this.speed = -this.speed;
-                    // this.ndPlayer.scaleX = -this.ndPlayer.scaleX;
                     this._gameStatus = 3;
-                    // this._bTouch = false;
-                    // this.ndPlayer.opacity = 0;
-                    // var finished = cc.callFunc(function (argument) {
-                    //     this._bTouch = true;
-                    //     this.ndPlayer.opacity = 255;
-                    // }, this);
-                    // var seq = cc.sequence(cc.delayTime(1.2), finished);
-                    // this.ndPlayer.runAction(seq);
                 }
             }
         }
@@ -86,14 +75,12 @@ cc.Class({
             if (this._gameStatus == 0)
                 this.gameStart();
             else if (this._gameStatus == 1){
-                this.speed = -this.speed;
-                this.ndPlayer.scaleX = -this.ndPlayer.scaleX;
+                this.turnTo();
             } else if (this._gameStatus == 3){
                 this._gameStatus = 1;
             }
         }, this);
         cc.find("back", this.ndResult).on("click", function (argument) {
-            this.stopAudio();
             cc.director.loadScene("Lobby");
         }, this);
     },
@@ -107,6 +94,11 @@ cc.Class({
         cc.find("times", this.ndResult).getComponent(cc.Label).string = this.iCount.toString();
     },
 
+    turnTo(){
+        this.speed = -this.speed;
+        this.ndPlayer.scaleX = -this.ndPlayer.scaleX;
+    },
+
     gameStart(){
         this.playSound("click");
         this.ndMap.active = true;
@@ -116,6 +108,8 @@ cc.Class({
         this._gameStatus = 1;
         this.iCount = 0;
         this.idx = 0;
+        this.playTime();
+        cc.find("labLv", this.labTime.node).getComponent(cc.Label).string = "Lv:"+this.iLv.toString();
         this.LvData = [[0,1],[6,7],[-5,18],[3,26],[-2,31],[3,36],[-3,42],[3,48],[0,51],[4,55],[-4,63],[4,71],[-2,77],[3,82],[-1,86],[2,89],[-1,92],[2,95],[-1,98]];
         var para = 1;
         if (para > 0) this.ndPlayer.scaleX = -this.ndPlayer.scaleX;
@@ -130,6 +124,9 @@ cc.Class({
         this.ndResult.active = true;
         this.ndMap.active = false;
         this.showCount();
+        cc.sys.localStorage.setItem("level", parseInt(this.iLv)+1);
+        this.labTime.unschedule(this.coPlayTime);
+        this.stopAudio();
     },
 
     playAudio () {
@@ -157,6 +154,9 @@ cc.Class({
                 this.idx = i;
                 dx = this.LvData[this.idx][0];
                 dy = this.LvData[this.idx][1];
+                if (curY == this.LvData[i][1]){
+                    this.turnTo();
+                }
                 break;
             }
         };
@@ -220,4 +220,24 @@ cc.Class({
     //         cc.log(this.ndPlayer);
     //     });
     // },
+
+    playTime(){
+        var self = this;
+        this._iTime = 0;
+        this.labTime.node.active = true;
+        this.coPlayTime = function (argument) {
+            self.labTime.string = self.getStrTime(++self._iTime);
+        }
+        this.labTime.schedule(this.coPlayTime, 1);
+    },
+
+    getStrTime(iTime){
+        var iM = Math.floor(iTime/60);
+        var iS = iTime%60;
+        if (iM < 10)
+            iM = "0"+iM;
+        if (iS < 10)
+            iS = "0"+iS;
+        return iM+":"+iS;
+    },
 });
