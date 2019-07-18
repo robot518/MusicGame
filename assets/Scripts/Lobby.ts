@@ -54,12 +54,12 @@ export default class Lobby extends cc.Component {
     }
 
     initEvent(){
-        // this.initBannerAd();
         cc.find("share", this.node).on("click", function (argument) {
             this.playSound("click");
-            this.share();
+            this.onWxEvent("share");
         }, this);
-        // this.initVideoAd();
+        this.onWxEvent("initBanner");
+        this.onWxEvent("initVideo");
     }
 
     initShow(){
@@ -67,49 +67,69 @@ export default class Lobby extends cc.Component {
         this.showScv();
     }
 
-    initVideoAd(){
-        // if (!window.wx) return;
-        // this._videoAd = wx.createRewardedVideoAd({
-        //     adUnitId: 'adunit-a7fcb876faba0c89'
-        // });
-        // this._videoAd.onClose(res => {
-        //     if (res && res.isEnded || res === undefined){
-        //         this.loadMusic();
-        //     }else{
+    onWxEvent(s){
+        if (!CC_WECHATGAME) return;
+        switch(s){
+            case "initBanner":
+                // if (this._bannerAd != null)
+                //     this._bannerAd.destory();
+                // var systemInfo = wx.getSystemInfoSync();
+                // this._bannerAd = wx.createBannerAd({
+                //     adUnitId: 'adunit-24778ca4dc4e174a',
+                //     style: {
+                //         left: 0,
+                //         top: systemInfo.windowHeight - 144,
+                //         width: 720,
+                //     }
+                // });
+                // var self = this;
+                // this._bannerAd.onResize(res => {
+                //     if (self._bannerAd)
+                //         self._bannerAd.style.top = systemInfo.windowHeight - self._bannerAd.style.realHeight;
+                // })
+                // this._bannerAd.show();
+                // this._bannerAd.onError(err => {
+                //   console.log(err);
+                //   //无合适广告
+                //   if (err.errCode == 1004){
 
-        //     }
-        // });
-        // this._videoAd.onError(err => {
-        //   console.log(err)
-        // });
-    }
+                //   }
+                // })
+                break;
+            case "initVideo":
+                // this._videoAd = wx.createRewardedVideoAd({
+                //     adUnitId: 'adunit-a7fcb876faba0c89'
+                // });
+                // this._videoAd.onClose(res => {
+                //     if (res && res.isEnded || res === undefined){
+                //         this.loadMusic();
+                //     }else{
 
-    initBannerAd(){
-        // if (!window.wx) return;
-        // if (this._bannerAd != null)
-        //     this._bannerAd.destory();
-        // var systemInfo = wx.getSystemInfoSync();
-        // this._bannerAd = wx.createBannerAd({
-        //     adUnitId: 'adunit-24778ca4dc4e174a',
-        //     style: {
-        //         left: 0,
-        //         top: systemInfo.windowHeight - 144,
-        //         width: 720,
-        //     }
-        // });
-        // var self = this;
-        // this._bannerAd.onResize(res => {
-        //     if (self._bannerAd)
-        //         self._bannerAd.style.top = systemInfo.windowHeight - self._bannerAd.style.realHeight;
-        // })
-        // this._bannerAd.show();
-        // this._bannerAd.onError(err => {
-        //   console.log(err);
-        //   //无合适广告
-        //   if (err.errCode == 1004){
-
-        //   }
-        // })
+                //     }
+                // });
+                // this._videoAd.onError(err => {
+                //   console.log(err)
+                // });
+                break;
+            case "share":
+                wx.shareAppMessage({
+                    title: "你来挑战我啊！",
+                    imageUrl: canvas.toTempFilePathSync({
+                        destWidth: 500,
+                        destHeight: 400
+                    })
+                });
+                break;
+            case "showVideo":
+                // if (self._videoAd != null){
+                //     self._videoAd.show()
+                //     .catch(err => {
+                //         self._videoAd.load()
+                //         .then(() => self._videoAd.show())
+                //     })
+                // }
+                break;
+        }
     }
 
     showScv(){
@@ -124,38 +144,16 @@ export default class Lobby extends cc.Component {
                     this._iLv = i+1;
                     this.loadMusic();
                 } else {
-                    // this.showVideo();
+                    this.onWxEvent("showVideo");
                 }
             }, this);
         };
         for (let i = 4; i < 6; i++) {
             this.playSound("click");
             cc.find("play", children[i]).on("click", function (argument) {
-                // this.showVideo();
+                this.onWxEvent("showVideo");
             }, this);
         };
-    }
-
-    share(){
-        // if (!window.wx) return;
-        // wx.shareAppMessage({
-        //     title: "你来挑战我啊！",
-        //     imageUrl: canvas.toTempFilePathSync({
-        //         destWidth: 500,
-        //         destHeight: 400
-        //     })
-        // });
-    }
-
-    showVideo(){
-        // if (!window.wx) return;
-        // if (self._videoAd != null){
-        //     self._videoAd.show()
-        //     .catch(err => {
-        //         self._videoAd.load()
-        //         .then(() => self._videoAd.show())
-        //     })
-        // }
     }
 
     loadMusic(){
