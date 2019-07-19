@@ -1,5 +1,5 @@
 const {ccclass, property} = cc._decorator;
-var SPEED = 80;
+var SPEED = 100;
 
 @ccclass
 export default class Level extends cc.Component {
@@ -53,24 +53,24 @@ export default class Level extends cc.Component {
             var dy = SPEED/2 * dt;
             this.ndPlayer.x += dx;
             this.ndPlayer.y += dy;
-            this.ndMap.x -= 2*dx;
-            this.ndMap.y -= 2*dy;
-            var pos = this._getTilePos(cc.v2(this.ndPlayer.x, this.ndPlayer.y));
-            if (pos.x == 0 && pos.y == 1) {
-                this.gameOver();
-            } else {
-                var id = this._layerFloor.getTileGIDAt(pos);
-                // cc.log(pos.x, pos.y, id);
-                if (id == 0) {
-                    this._iCount++;
-                    var p = this._getNewPos();
-                    this.ndPlayer.x += p.x;
-                    this.ndPlayer.y += p.y;
-                    this.ndMap.x -= 2*p.x;
-                    this.ndMap.y -= 2*p.y;
-                    this._gameStatus = 3;
-                }
-            }
+            this.ndMap.x -= dx;
+            this.ndMap.y -= dy;
+            // var pos = this._getTilePos(cc.v2(this.ndPlayer.x, this.ndPlayer.y));
+            // if (pos.x == 0 && pos.y == 1) {
+            //     this.gameOver();
+            // } else {
+            //     var id = this._layerFloor.getTileGIDAt(pos);
+            //     // cc.log(pos.x, pos.y, id);
+            //     if (id == 0) {
+            //         this._iCount++;
+            //         var p = this._getNewPos();
+            //         this.ndPlayer.x += p.x;
+            //         this.ndPlayer.y += p.y;
+            //         this.ndMap.x -= 2*p.x;
+            //         this.ndMap.y -= 2*p.y;
+            //         this._gameStatus = 3;
+            //     }
+            // }
         }
     }
 
