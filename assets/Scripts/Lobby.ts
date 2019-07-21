@@ -184,8 +184,8 @@ export default class Lobby extends cc.Component {
             var obj = scene.getChildByName("Canvas").getComponent("Level");
             obj.audioTask = res;
             obj.iLv = lv;
-            // var url = 'map/Lv1Map';
-            // obj.onCreateTileMap(url);
+            var url = 'map/Lv1a';
+            obj.onCreateTileMap(url);
         });
     }
 

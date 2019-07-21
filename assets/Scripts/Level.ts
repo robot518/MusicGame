@@ -8,7 +8,7 @@ export default class Level extends cc.Component {
     ndPlayer: cc.Node = null;
 
     @property(cc.Node)
-    ndMap: cc.Node = null;
+    mapRoot: cc.Node = null;
 
     @property(cc.Node)
     ndResult: cc.Node = null;
@@ -33,6 +33,7 @@ export default class Level extends cc.Component {
     iLv: number;
     _tiledMap: any;
     _layerFloor: any;
+    _ndMap: cc.Node;
     audioTask: any;
     LvData: number[][];
 
@@ -53,24 +54,26 @@ export default class Level extends cc.Component {
             var dy = SPEED/2 * dt;
             this.ndPlayer.x += dx;
             this.ndPlayer.y += dy;
-            this.ndMap.x -= dx;
-            this.ndMap.y -= dy;
-            // var pos = this._getTilePos(cc.v2(this.ndPlayer.x, this.ndPlayer.y));
-            // if (pos.x == 0 && pos.y == 1) {
-            //     this.gameOver();
-            // } else {
-            //     var id = this._layerFloor.getTileGIDAt(pos);
-            //     // cc.log(pos.x, pos.y, id);
-            //     if (id == 0) {
-            //         this._iCount++;
-            //         var p = this._getNewPos();
-            //         this.ndPlayer.x += p.x;
-            //         this.ndPlayer.y += p.y;
-            //         this.ndMap.x -= 2*p.x;
-            //         this.ndMap.y -= 2*p.y;
-            //         this._gameStatus = 3;
-            //     }
-            // }
+            this._ndMap.parent.x -= dx;
+            this._ndMap.parent.y -= dy;
+            var pos = this._getTilePos(cc.v2(this.ndPlayer.x, this.ndPlayer.y));
+            if (pos.x == 0 && pos.y == 1) {
+                this.gameOver();
+            } else {
+                var id = this._layerFloor.getTileGIDAt(pos);
+                cc.log(pos.x, pos.y, id);
+                if (id == 0) {
+                    this._iCount++;
+                    // var p = this._getNewPos();
+                    // this.ndPlayer.x += p.x;
+                    // this.ndPlayer.y += p.y;
+                    // this._ndMap.x -= 2*p.x;
+                    // this._ndMap.y -= 2*p.y;
+                    // this._gameStatus = 3;
+                    this.ndPlayer.x -= 5*dx;
+                    this.turnTo();
+                }
+            }
         }
     }
 
@@ -95,7 +98,8 @@ export default class Level extends cc.Component {
     initParas(){
         this._gameStatus = 0;
         this.iLv = 1;
-        this._tiledMap = this.ndMap.getComponent('cc.TiledMap');
+        this.ndPlayer.zIndex = 1;
+        // this._tiledMap = this._ndMap.getComponent('cc.TiledMap');
     }
 
     initEvent(){
@@ -129,8 +133,8 @@ export default class Level extends cc.Component {
 
     gameStart(){
         this.playSound("click");
-        this.ndMap.active = true;
-        this._layerFloor = this._tiledMap.getLayer("floor");
+        this._ndMap.active = true;
+        // this._layerFloor = this._tiledMap.getLayer("floor");
         var anim = this.ndPlayer.getComponent(cc.Animation);
         anim.play();
         this._gameStatus = 1;
@@ -152,7 +156,7 @@ export default class Level extends cc.Component {
         var anim = this.ndPlayer.getComponent(cc.Animation);
         anim.stop();
         this.ndResult.active = true;
-        this.ndMap.active = false;
+        this._ndMap.active = false;
         this.showCount();
         var lv = cc.sys.localStorage.getItem("level");
         if (lv == this.iLv) cc.sys.localStorage.setItem("level", this.iLv+1);
@@ -178,7 +182,7 @@ export default class Level extends cc.Component {
     }
 
     _getNewPos(){
-        var mapSize = this.ndMap.getContentSize();
+        var mapSize = this._ndMap.getContentSize();
         var tileSize = this._tiledMap.getTileSize();
         var dx = 0, dy = 1;
         var curY = Math.floor(2*(this.ndPlayer.y+mapSize.height/2)/tileSize.height);
@@ -202,7 +206,7 @@ export default class Level extends cc.Component {
     }
 
     _getTilePos(posInPixel) {
-        var mapSize = this.ndMap.getContentSize();
+        var mapSize = this._ndMap.getContentSize();
         var tileSize = this._tiledMap.getTileSize();
         var multi = tileSize.width/tileSize.height;
         posInPixel.x += mapSize.width/2;
@@ -235,24 +239,32 @@ export default class Level extends cc.Component {
         return cc.v2(m, n);
     }
 
-    // onCreateTileMap (url) {
-    //     cc.loader.loadRes(url, cc.TiledMapAsset, (err, tmxAsset) => {
-    //         if (err) {
-    //             cc.error(err);
-    //             return;
-    //         }
-    //         // this.ndMap.destroyAllChildren();
-    //         var node = new cc.Node();
-    //         this.ndMap.addChild(node);
-    //         var tileMap = node.addComponent(cc.TiledMap);
-    //         tileMap.tmxAsset = tmxAsset;
-    //         this.ndPlayer.parent = node;
-    //         // node.addChild(this.ndPlayer);
-    //         // this.ndPlayer.zIndex = 1;
-    //         // this.ndPlayer.position = cc.v2(2500, 25);
-    //         cc.log(this.ndPlayer);
-    //     });
-    // },
+    onCreateTileMap (url) {
+        cc.loader.loadRes(url, cc.TiledMapAsset, (err, tmxAsset) => {
+            if (err) {
+                cc.error(err);
+                return;
+            }
+            // this.mapRoot.destroyAllChildren();
+            var node = new cc.Node();
+            this.mapRoot.addChild(node);
+            var tileMap = node.addComponent(cc.TiledMap);
+            tileMap.tmxAsset = tmxAsset;
+            this._tiledMap = tileMap;
+            this._layerFloor = this._tiledMap.getLayer("floor");
+            this._ndMap = node;
+            // var mapSize = this._ndMap.getContentSize();
+            // node.position.y = mapSize.height/2;
+            // cc.log(mapSize, node);
+            // this._ndMap.active = false;
+            
+            // this.ndPlayer.parent = node;
+            // node.addChild(this.ndPlayer);
+            // this.ndPlayer.zIndex = 1;
+            // this.ndPlayer.position = cc.v2(2500, 25);
+            // cc.log(this.ndPlayer);
+        });
+    }
 
     playTime(){
         var self = this;
