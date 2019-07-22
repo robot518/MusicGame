@@ -1,5 +1,5 @@
 const {ccclass, property} = cc._decorator;
-var SPEED = 100;
+var SPEED = 50;
 
 @ccclass
 export default class Level extends cc.Component {
@@ -15,6 +15,9 @@ export default class Level extends cc.Component {
 
     @property(cc.Node)
     ndBtn: cc.Node = null;
+
+    @property(cc.Node)
+    ndLine: cc.Node = null;
 
     @property(cc.Label)
     labTime: cc.Label = null;
@@ -34,8 +37,13 @@ export default class Level extends cc.Component {
     _tiledMap: any;
     _layerFloor: any;
     _ndMap: cc.Node;
+    _vPos: cc.Vec2;
+    _tPoint: cc.Vec2[];
     audioTask: any;
-    LvData: number[][];
+    // LvData: number[][];
+    line: cc.Graphics;
+    tTime: string[];
+    _bPlayTime: boolean;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -61,7 +69,7 @@ export default class Level extends cc.Component {
                 this.gameOver();
             } else {
                 var id = this._layerFloor.getTileGIDAt(pos);
-                cc.log(pos.x, pos.y, id);
+                // cc.log(pos.x, pos.y, id);
                 if (id == 0) {
                     this._iCount++;
                     // var p = this._getNewPos();
@@ -70,10 +78,17 @@ export default class Level extends cc.Component {
                     // this._ndMap.x -= 2*p.x;
                     // this._ndMap.y -= 2*p.y;
                     // this._gameStatus = 3;
-                    this.ndPlayer.x -= 5*dx;
-                    this.turnTo();
+                    // var tileSize = this._tiledMap.getTileSize();
+                    // this.ndPlayer.x -= 5*dx;
+                    // // this.ndPlayer.x -= this._speed > 0 ? tileSize.width/2 : -tileSize.width/2;
+                    // this.turnTo();
                 }
             }
+            this.drawLine(cc.v2(dx, dy));
+        }
+        if (this._bPlayTime == true){
+            this._iTime+=dt;
+            this.labTime.string = this._iTime.toFixed(2).toString();
         }
     }
 
@@ -93,13 +108,15 @@ export default class Level extends cc.Component {
             canvas.fitWidth = true;
             canvas.fitHeight = false;
         }
+        this._vPos = cc.v2(size.width/2, size.height/2);
     }
 
     initParas(){
         this._gameStatus = 0;
         this.iLv = 1;
-        this.ndPlayer.zIndex = 1;
-        // this._tiledMap = this._ndMap.getComponent('cc.TiledMap');
+        this.line = this.ndLine.getComponent(cc.Graphics);
+        this._tPoint = [];
+        this.tTime = [];
     }
 
     initEvent(){
@@ -109,17 +126,37 @@ export default class Level extends cc.Component {
             else if (this._gameStatus == 1){
                 this.turnTo();
             } else if (this._gameStatus == 3){
-                this._gameStatus = 1;
+                // this._gameStatus = 1;
             }
         }, this);
         cc.find("back", this.ndResult).on("click", function (argument) {
             cc.director.loadScene("Lobby");
         }, this);
+        cc.find("stop", this.node).on("click", function(params) {
+            this._gameStatus = 4-this._gameStatus;
+            cc.log("this.tTime = ", this.tTime);
+            this._bPlayTime = !this._bPlayTime;
+        }, this);
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
+    }
+
+    onKeyDown(event) {
+        if (this._gameStatus != 1) return;
+        switch(event.keyCode) {
+            case cc.macro.KEY.left:
+                if (this._speed > 0) this.turnTo();
+                break;
+            case cc.macro.KEY.right:
+                if (this._speed < 0) this.turnTo();
+                break;
+        }
     }
 
     initShow(){
         this.ndBtn.active = true;
         this.ndResult.active = false;
+        this.ndPlayer.zIndex = 1;
+        this.ndLine.zIndex = 1;
     }
 
     showCount(){
@@ -129,26 +166,30 @@ export default class Level extends cc.Component {
     turnTo(){
         this._speed = -this._speed;
         this.ndPlayer.scaleX = -this.ndPlayer.scaleX;
+        this.record();
+        var iNum = this._speed > 0 ? 1 : -1;
+        this.tTime.push((iNum*this._iTime).toFixed(2));
     }
 
     gameStart(){
         this.playSound("click");
         this._ndMap.active = true;
-        // this._layerFloor = this._tiledMap.getLayer("floor");
         var anim = this.ndPlayer.getComponent(cc.Animation);
         anim.play();
         this._gameStatus = 1;
         this._iCount = 0;
         this._idx = 0;
-        this.playTime();
+
+        this._iTime = 0;
+        this._bPlayTime = true;
+        this.labTime.node.active = true;
+        
         cc.find("labLv", this.labTime.node).getComponent(cc.Label).string = "Lv:"+this.iLv.toString();
-        this.LvData = [[0,1],[6,7],[-5,18],[3,26],[-2,31],[3,36],[-3,42],[3,48],[0,51],[4,55],[-4,63],[4,71],[-2,77],[3,82],[-1,86],[2,89],[-1,92],[2,95],[-1,98]];
-        // var para = 1;
-        // if (para > 0) 
-        // this.ndPlayer.scaleX = -this.ndPlayer.scaleX;
-        // this._speed = para*SPEED;
+        // this.LvData = [[0,1],[6,7],[-5,18],[3,26],[-2,31],[3,36],[-3,42],[3,48],[0,51],[4,55],[-4,63],[4,71],[-2,77],[3,82],[-1,86],[2,89],[-1,92],[2,95],[-1,98]];
         this._speed = SPEED;
         this.playAudio();
+        this.record();
+        this.tTime.push(0+"");
     }
 
     gameOver(){
@@ -160,11 +201,8 @@ export default class Level extends cc.Component {
         this.showCount();
         var lv = cc.sys.localStorage.getItem("level");
         if (lv == this.iLv) cc.sys.localStorage.setItem("level", this.iLv+1);
-        this.labTime.unschedule(this.coPlayTime);
+        this._bPlayTime = false;
         this.stopAudio();
-    }
-    coPlayTime(coPlayTime: any) {
-        throw new Error("Method not implemented.");
     }
 
     playAudio () {
@@ -181,29 +219,48 @@ export default class Level extends cc.Component {
         if (sName == "click") cc.audioEngine.play(this.audioClick, false, 1);
     }
 
-    _getNewPos(){
-        var mapSize = this._ndMap.getContentSize();
-        var tileSize = this._tiledMap.getTileSize();
-        var dx = 0, dy = 1;
-        var curY = Math.floor(2*(this.ndPlayer.y+mapSize.height/2)/tileSize.height);
-        for (var i = this._idx; i < this.LvData.length; i++) {
-            if (curY <= this.LvData[i][1]){
-                this._idx = i;
-                dx = this.LvData[this._idx][0];
-                dy = this.LvData[this._idx][1];
-                if (curY == this.LvData[i][1]){
-                    this.turnTo();
-                }
-                break;
+    onCreateTileMap (url) {
+        cc.loader.loadRes(url, cc.TiledMapAsset, (err, tmxAsset) => {
+            if (err) {
+                cc.error(err);
+                return;
             }
-        };
-        var x = tileSize.width/2*dx;
-        var px = x-this.ndPlayer.x;
-        var y = tileSize.height/2*dy-mapSize.height/2;
-        var py = y-this.ndPlayer.y;
-        // cc.log(x, y, px, py, curY, this._idx, this.ndPlayer.x, this.ndPlayer.y);
-        return cc.v2(px, py);
+            // this.mapRoot.destroyAllChildren();
+            var node = new cc.Node();
+            this.mapRoot.addChild(node);
+            var tileMap = node.addComponent(cc.TiledMap);
+            tileMap.tmxAsset = tmxAsset;
+            this._tiledMap = tileMap;
+            this._layerFloor = this._tiledMap.getLayer("floor");
+            this._ndMap = node;
+            node.active = false;
+            this._ndMap.active = false;
+        });
     }
+
+    // _getNewPos(){
+    //     var mapSize = this._ndMap.getContentSize();
+    //     var tileSize = this._tiledMap.getTileSize();
+    //     var dx = 0, dy = 1;
+    //     var curY = Math.floor(2*(this.ndPlayer.y+mapSize.height/2)/tileSize.height);
+    //     for (var i = this._idx; i < this.LvData.length; i++) {
+    //         if (curY <= this.LvData[i][1]){
+    //             this._idx = i;
+    //             dx = this.LvData[this._idx][0];
+    //             dy = this.LvData[this._idx][1];
+    //             if (curY == this.LvData[i][1]){
+    //                 this.turnTo();
+    //             }
+    //             break;
+    //         }
+    //     };
+    //     var x = tileSize.width/2*dx;
+    //     var px = x-this.ndPlayer.x;
+    //     var y = tileSize.height/2*dy-mapSize.height/2;
+    //     var py = y-this.ndPlayer.y;
+    //     // cc.log(x, y, px, py, curY, this._idx, this.ndPlayer.x, this.ndPlayer.y);
+    //     return cc.v2(px, py);
+    // }
 
     _getTilePos(posInPixel) {
         var mapSize = this._ndMap.getContentSize();
@@ -239,52 +296,22 @@ export default class Level extends cc.Component {
         return cc.v2(m, n);
     }
 
-    onCreateTileMap (url) {
-        cc.loader.loadRes(url, cc.TiledMapAsset, (err, tmxAsset) => {
-            if (err) {
-                cc.error(err);
-                return;
-            }
-            // this.mapRoot.destroyAllChildren();
-            var node = new cc.Node();
-            this.mapRoot.addChild(node);
-            var tileMap = node.addComponent(cc.TiledMap);
-            tileMap.tmxAsset = tmxAsset;
-            this._tiledMap = tileMap;
-            this._layerFloor = this._tiledMap.getLayer("floor");
-            this._ndMap = node;
-            // var mapSize = this._ndMap.getContentSize();
-            // node.position.y = mapSize.height/2;
-            // cc.log(mapSize, node);
-            // this._ndMap.active = false;
-            
-            // this.ndPlayer.parent = node;
-            // node.addChild(this.ndPlayer);
-            // this.ndPlayer.zIndex = 1;
-            // this.ndPlayer.position = cc.v2(2500, 25);
-            // cc.log(this.ndPlayer);
-        });
-    }
-
-    playTime(){
-        var self = this;
-        this._iTime = 0;
-        this.labTime.node.active = true;
-        this.coPlayTime = function (argument) {
-            self.labTime.string = self.getStrTime(++self._iTime);
+    drawLine(v2){
+        this.line.clear();
+        var tileSize = this._tiledMap.getTileSize();
+        this.line.moveTo(this._vPos.x, this._vPos.y+tileSize.height/2);
+        for (let l = this._tPoint.length, i = l-1; i >= 0; i--) {
+            var p = this._tPoint[i];
+            p.x -= v2.x;
+            p.y -= v2.y;
+            this.line.lineTo(p.x, p.y);
+            if (p.y < 0) break;
         }
-        this.labTime.schedule(this.coPlayTime, 1);
+        this.line.stroke();
     }
 
-    getStrTime(iTime){
-        var iM = Math.floor(iTime/60);
-        var iS = iTime%60;
-        var s = "";
-        if (iM < 10) s = "0"+iM;
-        else s = iM.toString();
-        s += ":";
-        if (iS < 10) s += "0"+iS;
-        else s += iS.toString();
-        return s;
+    record(){
+        var tileSize = this._tiledMap.getTileSize();
+        this._tPoint.push(cc.v2(this._vPos.x, this._vPos.y+tileSize.height/2));
     }
 }

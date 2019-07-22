@@ -148,6 +148,7 @@ export default class Lobby extends cc.Component {
                 if (i < count){
                     this._iLv = i+1;
                     this.loadMusic();
+                    // this.loadLvScene();
                 } else {
                     this.onWxEvent("showVideo");
                 }
@@ -179,12 +180,16 @@ export default class Lobby extends cc.Component {
             return;
         }
         this.labLoad.string = "下载完成";
+        this.loadLvScene(res);
+    }
+
+    loadLvScene(res){
         var lv = this._iLv;
         cc.director.loadScene("Level", function (err, scene) {
             var obj = scene.getChildByName("Canvas").getComponent("Level");
             obj.audioTask = res;
             obj.iLv = lv;
-            var url = 'map/Lv1a';
+            var url = 'map/Lv1';
             obj.onCreateTileMap(url);
         });
     }
