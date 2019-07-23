@@ -35,23 +35,16 @@ export default class Lobby extends cc.Component {
     // update (dt) {}
 
     initCanvas(){
-        cc.view.setDesignResolutionSize(720, 1280, cc.ResolutionPolicy.SHOW_ALL);
-        let srcScaleForShowAll = Math.min(cc.view.getCanvasSize().width / this.node.width, cc.view.getCanvasSize().height / this.node.height);
-        let realWidth = this.node.width * srcScaleForShowAll;
-        let realHeight = this.node.height * srcScaleForShowAll;
-        this.node.scale = Math.max(cc.view.getCanvasSize().width / realWidth, cc.view.getCanvasSize().height / realHeight);
-        // var canvas = this.node.getComponent(cc.Canvas);
-        // var size = canvas.designResolution;
-        // var cSize = cc.view.getFrameSize();
-        // if (cSize.width/cSize.height >= size.width/size.height){
-        //     canvas.fitWidth = false;
-        //     canvas.fitHeight = true;
-        // }else{
-        //     canvas.fitWidth = true;
-        //     canvas.fitHeight = false;
-        // }
-        // canvas.alignWithScreen();
-        // cc.view.setDesignResolutionSize(720, 1280, cc.ResolutionPolicy.EXACT_FIT);
+        var canvas = this.node.getComponent(cc.Canvas);
+        var size = canvas.designResolution;
+        var cSize = cc.view.getFrameSize();
+        if (cSize.width/cSize.height >= size.width/size.height){
+            canvas.fitWidth = false;
+            canvas.fitHeight = true;
+        }else{
+            canvas.fitWidth = true;
+            canvas.fitHeight = false;
+        }
     }
 
     initParas(){
@@ -165,7 +158,7 @@ export default class Lobby extends cc.Component {
     loadMusic(){
         this.ndLoad.active = true;
         this.labLoad.string = "下载中...";
-        var remoteUrl = "http://47.107.178.120/MusicGame/Lv1.mp3";
+        var remoteUrl = "http://47.107.178.120/MusicGame/Lv"+this._iLv+".mp3";
         cc.loader.load({url: remoteUrl, type: "mp3"}, this.onProgress.bind(this), this.onComplete.bind(this));
     }
 

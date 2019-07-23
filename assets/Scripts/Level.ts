@@ -79,9 +79,9 @@ export default class Level extends cc.Component {
                     // this._ndMap.y -= 2*p.y;
                     // this._gameStatus = 3;
                     // var tileSize = this._tiledMap.getTileSize();
-                    // this.ndPlayer.x -= 5*dx;
-                    // // this.ndPlayer.x -= this._speed > 0 ? tileSize.width/2 : -tileSize.width/2;
-                    // this.turnTo();
+                    this.ndPlayer.x -= 5*dx;
+                    // this.ndPlayer.x -= this._speed > 0 ? tileSize.width/2 : -tileSize.width/2;
+                    this.turnTo();
                 }
             }
             this.drawLine(cc.v2(dx, dy));
@@ -93,11 +93,6 @@ export default class Level extends cc.Component {
     }
 
     initCanvas(){
-        // cc.view.setDesignResolutionSize(720, 1280, cc.ResolutionPolicy.SHOW_ALL);
-        // let srcScaleForShowAll = Math.min(cc.view.getCanvasSize().width / this.node.width, cc.view.getCanvasSize().height / this.node.height);
-        // let realWidth = this.node.width * srcScaleForShowAll;
-        // let realHeight = this.node.height * srcScaleForShowAll;
-        // this.node.scale = Math.max(cc.view.getCanvasSize().width / realWidth, cc.view.getCanvasSize().height / realHeight);
         var canvas = this.node.getComponent(cc.Canvas);
         var size = canvas.designResolution;
         var cSize = cc.view.getFrameSize();
@@ -108,7 +103,7 @@ export default class Level extends cc.Component {
             canvas.fitWidth = true;
             canvas.fitHeight = false;
         }
-        this._vPos = cc.v2(size.width/2, size.height/2);
+        this._vPos = cc.v2(size.width/2, cc.winSize.height/2);
     }
 
     initParas(){
