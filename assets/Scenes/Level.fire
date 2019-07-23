@@ -315,7 +315,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "7689709f-1b1f-4b78-be4b-ed481428bbe8"
+      "__uuid__": "927c70b1-be16-406b-8089-cd4a52e5ec61"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -761,7 +761,11 @@
       "__id__": 14
     },
     "_enabled": true,
-    "_materials": [],
+    "_materials": [
+      {
+        "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
+      }
+    ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
@@ -808,7 +812,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 500,
-      "height": 140
+      "height": 176.4
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -849,7 +853,11 @@
       "__id__": 16
     },
     "_enabled": true,
-    "_materials": [],
+    "_materials": [
+      {
+        "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
+      }
+    ],
     "_useOriginalSize": false,
     "_string": "失败次数：",
     "_N$string": "失败次数：",
@@ -894,7 +902,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 133.48,
-      "height": 140
+      "height": 176.4
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -935,7 +943,11 @@
       "__id__": 18
     },
     "_enabled": true,
-    "_materials": [],
+    "_materials": [
+      {
+        "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
+      }
+    ],
     "_useOriginalSize": false,
     "_string": "10",
     "_N$string": "10",
@@ -1088,12 +1100,14 @@
       "__id__": 21
     },
     "_enabled": true,
-    "_materials": [],
+    "_materials": [
+      {
+        "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
+      }
+    ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "100cb609-bf25-4d50-9ff9-8b49982af3cc"
-    },
+    "_spriteFrame": null,
     "_type": 1,
     "_sizeMode": 0,
     "_fillType": 0,
@@ -1192,9 +1206,7 @@
       "b": 120,
       "a": 200
     },
-    "_N$normalSprite": {
-      "__uuid__": "100cb609-bf25-4d50-9ff9-8b49982af3cc"
-    },
+    "_N$normalSprite": null,
     "_N$pressedSprite": {
       "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
     },
@@ -1370,8 +1382,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 50,
-      "height": 50
+      "width": 89,
+      "height": 226
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1386,8 +1398,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
+      "x": -0.33,
+      "y": 0.33,
       "z": 1
     },
     "_eulerAngles": {
@@ -1420,10 +1432,10 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "34718e98-cb4f-44bf-af7c-ecab33c3c60e"
+      "__uuid__": "4d2d696a-afad-4142-ae34-4b02d3244c5f"
     },
     "_type": 0,
-    "_sizeMode": 0,
+    "_sizeMode": 2,
     "_fillType": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
@@ -1624,7 +1636,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 200.2,
-      "height": 100
+      "height": 126
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1684,7 +1696,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 44.49,
-      "height": 100
+      "height": 126
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1725,7 +1737,11 @@
       "__id__": 35
     },
     "_enabled": true,
-    "_materials": [],
+    "_materials": [
+      {
+        "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
+      }
+    ],
     "_useOriginalSize": false,
     "_string": "1",
     "_N$string": "1",
@@ -1751,7 +1767,11 @@
       "__id__": 34
     },
     "_enabled": true,
-    "_materials": [],
+    "_materials": [
+      {
+        "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
+      }
+    ],
     "_useOriginalSize": false,
     "_string": "00:00",
     "_N$string": "00:00",
@@ -1781,7 +1801,7 @@
         "__id__": 39
       }
     ],
-    "_active": true,
+    "_active": false,
     "_level": 2,
     "_components": [
       {
@@ -2168,6 +2188,9 @@
     },
     "ndLine": {
       "__id__": 30
+    },
+    "ndBg": {
+      "__id__": 5
     },
     "labTime": {
       "__id__": 37

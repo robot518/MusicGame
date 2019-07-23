@@ -19,6 +19,9 @@ export default class Level extends cc.Component {
     @property(cc.Node)
     ndLine: cc.Node = null;
 
+    @property(cc.Node)
+    ndBg: cc.Node = null;
+
     @property(cc.Label)
     labTime: cc.Label = null;
 
@@ -44,6 +47,8 @@ export default class Level extends cc.Component {
     line: cc.Graphics;
     tTime: string[];
     _bPlayTime: boolean;
+    _bMove: boolean;
+    _vDesPos: cc.Vec2;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -60,36 +65,55 @@ export default class Level extends cc.Component {
         if (this._gameStatus == 1){
             var dx = this._speed * dt;
             var dy = SPEED/2 * dt;
-            this.ndPlayer.x += dx;
-            this.ndPlayer.y += dy;
+            if (this._bMove == true){
+                this.ndPlayer.x += dx;
+                this.ndPlayer.y += dy;
+            }else{
+                this._vDesPos.x += dx;
+                this._vDesPos.y += dy;
+            }
             this._ndMap.parent.x -= dx;
             this._ndMap.parent.y -= dy;
-            var pos = this._getTilePos(cc.v2(this.ndPlayer.x, this.ndPlayer.y));
-            if (pos.x == 0 && pos.y == 1) {
+            var pos = this._bMove == true ? this._getTilePos(cc.v2(this.ndPlayer.x, this.ndPlayer.y)) : this._getTilePos(cc.v2(this._vDesPos.x, this._vDesPos.y));
+            if (pos.x == 168 && pos.y == 119) {
                 this.gameOver();
             } else {
                 var id = this._layerFloor.getTileGIDAt(pos);
                 // cc.log(pos.x, pos.y, id);
                 if (id == 0) {
                     this._iCount++;
+                    this.turnTo();
+
                     // var p = this._getNewPos();
                     // this.ndPlayer.x += p.x;
                     // this.ndPlayer.y += p.y;
                     // this._ndMap.x -= 2*p.x;
                     // this._ndMap.y -= 2*p.y;
                     // this._gameStatus = 3;
-                    // var tileSize = this._tiledMap.getTileSize();
-                    this.ndPlayer.x -= 5*dx;
-                    // this.ndPlayer.x -= this._speed > 0 ? tileSize.width/2 : -tileSize.width/2;
-                    this.turnTo();
+
+                    if (this._bMove == true){
+                        this.ndPlayer.x -= 10*dx;
+                        this._vDesPos.x = this.ndPlayer.x;
+                        this._vDesPos.y = this.ndPlayer.y;
+                        // var tileSize = this._tiledMap.getTileSize();
+                        // this.ndPlayer.x -= this._speed > 0 ? tileSize.width/2 : -tileSize.width/2;
+
+                        this._bMove = false;
+                        var seq = cc.sequence(cc.delayTime(2), cc.callFunc(()=>{
+                            this._bMove = true;
+                            this.ndPlayer.x = this._vDesPos.x;
+                            this.ndPlayer.y = this._vDesPos.y;
+                        }))
+                        this.ndPlayer.runAction(seq);
+                    }else this._vDesPos.x -= 10*dx;
                 }
             }
-            this.drawLine(cc.v2(dx, dy));
+            // this.drawLine(cc.v2(dx, dy));
         }
-        if (this._bPlayTime == true){
-            this._iTime+=dt;
-            this.labTime.string = this._iTime.toFixed(2).toString();
-        }
+        // if (this._bPlayTime == true){
+        //     this._iTime+=dt;
+        //     this.labTime.string = this._iTime.toFixed(2).toString();
+        // }
     }
 
     initCanvas(){
@@ -108,10 +132,10 @@ export default class Level extends cc.Component {
 
     initParas(){
         this._gameStatus = 0;
-        this.iLv = 1;
         this.line = this.ndLine.getComponent(cc.Graphics);
         this._tPoint = [];
         this.tTime = [];
+        this._vDesPos = cc.v2(0, 0);
     }
 
     initEvent(){
@@ -119,7 +143,8 @@ export default class Level extends cc.Component {
             if (this._gameStatus == 0)
                 this.gameStart();
             else if (this._gameStatus == 1){
-                this.turnTo();
+                if (this._bMove == true)
+                    this.turnTo();
             } else if (this._gameStatus == 3){
                 // this._gameStatus = 1;
             }
@@ -132,7 +157,7 @@ export default class Level extends cc.Component {
             cc.log("this.tTime = ", this.tTime);
             this._bPlayTime = !this._bPlayTime;
         }, this);
-        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
+        // cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
     }
 
     onKeyDown(event) {
@@ -154,6 +179,14 @@ export default class Level extends cc.Component {
         this.ndLine.zIndex = 1;
     }
 
+    showBg(){
+        if (this.iLv == 1) return;
+        var self = this;
+        cc.loader.loadRes("res/Lv"+this.iLv+"bg.jpg", cc.SpriteFrame, function (err, spriteFrame) {
+            self.ndBg.getComponent(cc.Sprite).spriteFrame = spriteFrame;
+        });
+    }
+
     showCount(){
         cc.find("times", this.ndResult).getComponent(cc.Label).string = this._iCount.toString();
     }
@@ -161,9 +194,9 @@ export default class Level extends cc.Component {
     turnTo(){
         this._speed = -this._speed;
         this.ndPlayer.scaleX = -this.ndPlayer.scaleX;
-        this.record();
-        var iNum = this._speed > 0 ? 1 : -1;
-        this.tTime.push((iNum*this._iTime).toFixed(2));
+
+        // this.record();
+        // this.tTime.push(this._iTime.toFixed(2));
     }
 
     gameStart(){
@@ -174,17 +207,18 @@ export default class Level extends cc.Component {
         this._gameStatus = 1;
         this._iCount = 0;
         this._idx = 0;
+        this._bMove = true;
 
-        this._iTime = 0;
-        this._bPlayTime = true;
-        this.labTime.node.active = true;
-        
-        cc.find("labLv", this.labTime.node).getComponent(cc.Label).string = "Lv:"+this.iLv.toString();
+        // this._iTime = 0;
+        // this._bPlayTime = true;
+        // this.labTime.node.active = true;
+        // cc.find("labLv", this.labTime.node).getComponent(cc.Label).string = "Lv:"+this.iLv.toString();
+        // this.record();
+        // this.tTime.push(0+"");
+
         // this.LvData = [[0,1],[6,7],[-5,18],[3,26],[-2,31],[3,36],[-3,42],[3,48],[0,51],[4,55],[-4,63],[4,71],[-2,77],[3,82],[-1,86],[2,89],[-1,92],[2,95],[-1,98]];
         this._speed = SPEED;
         this.playAudio();
-        this.record();
-        this.tTime.push(0+"");
     }
 
     gameOver(){
@@ -230,6 +264,12 @@ export default class Level extends cc.Component {
             this._ndMap = node;
             node.active = false;
             this._ndMap.active = false;
+            this.showBg();
+            var mapSize = this._ndMap.getContentSize();
+            var tileSize = this._tiledMap.getTileSize();
+            this.mapRoot.y = mapSize.height/2;
+            this.ndPlayer.y = -mapSize.height/2 + tileSize.height/2;
+            this.ndLine.y = this.ndPlayer.y;
         });
     }
 

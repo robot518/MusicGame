@@ -134,6 +134,7 @@ export default class Lobby extends cc.Component {
         // cc.sys.localStorage.setItem("level", 1);
         var count = cc.sys.localStorage.getItem("level") || 1;
         cc.log("count = ", count);
+        count = 6;
         var children = this.ndContent.children;
         for (let i = 0; i < 4; i++) {
             cc.find("play", children[i]).on("click", function (argument) {
@@ -158,7 +159,7 @@ export default class Lobby extends cc.Component {
     loadMusic(){
         this.ndLoad.active = true;
         this.labLoad.string = "下载中...";
-        var remoteUrl = "http://47.107.178.120/MusicGame/Lv"+this._iLv+".mp3";
+        var remoteUrl = "http://47.111.184.119/MusicGame/Lv"+this._iLv+".mp3";
         cc.loader.load({url: remoteUrl, type: "mp3"}, this.onProgress.bind(this), this.onComplete.bind(this));
     }
 
@@ -182,7 +183,8 @@ export default class Lobby extends cc.Component {
             var obj = scene.getChildByName("Canvas").getComponent("Level");
             obj.audioTask = res;
             obj.iLv = lv;
-            var url = 'map/Lv1';
+            var url = 'map/Lv'+lv;
+            // var url = "map/Lv"+this.iLv;
             obj.onCreateTileMap(url);
         });
     }
