@@ -25,6 +25,9 @@ export default class Level extends cc.Component {
     @property(cc.Label)
     labTime: cc.Label = null;
 
+    @property(cc.SpriteFrame)
+    sptGirl: cc.SpriteFrame = null;
+
     @property({
         type: cc.AudioClip
     })
@@ -75,7 +78,17 @@ export default class Level extends cc.Component {
             this._ndMap.parent.x -= dx;
             this._ndMap.parent.y -= dy;
             var pos = this._bMove == true ? this._getTilePos(cc.v2(this.ndPlayer.x, this.ndPlayer.y)) : this._getTilePos(cc.v2(this._vDesPos.x, this._vDesPos.y));
-            if (pos.x == 168 && pos.y == 119) {
+            if (this.iLv == 1 && pos.x == 168 && pos.y == 116) {
+                this.gameOver();
+            }else if(this.iLv == 2 && pos.x == 50 && pos.y == 25){
+                this.gameOver();
+            }else if(this.iLv == 3 && pos.x == 54 && pos.y == 26){
+                this.gameOver();
+            }else if(this.iLv == 4 && pos.x == 40 && pos.y == 36){
+                this.gameOver();
+            }else if(this.iLv == 5 && pos.x == 67 && pos.y == 32){
+                this.gameOver();
+            }else if(this.iLv == 6 && pos.x == 68 && pos.y == 28){
                 this.gameOver();
             } else {
                 var id = this._layerFloor.getTileGIDAt(pos);
@@ -182,12 +195,13 @@ export default class Level extends cc.Component {
     showBg(){
         if (this.iLv == 1) return;
         var self = this;
-        cc.loader.loadRes("res/Lv"+this.iLv+"bg.jpg", cc.SpriteFrame, function (err, spriteFrame) {
+        cc.loader.loadRes("Lv"+this.iLv+"bg.jpg", cc.SpriteFrame, function (err, spriteFrame) {
             self.ndBg.getComponent(cc.Sprite).spriteFrame = spriteFrame;
         });
     }
 
-    showCount(){
+    showResult(){
+        cc.find("lv", this.ndResult).getComponent(cc.Label).string = this.iLv.toString();
         cc.find("times", this.ndResult).getComponent(cc.Label).string = this._iCount.toString();
     }
 
@@ -200,10 +214,15 @@ export default class Level extends cc.Component {
     }
 
     gameStart(){
-        this.playSound("click");
+        // this.playSound("click");
         this._ndMap.active = true;
         var anim = this.ndPlayer.getComponent(cc.Animation);
-        anim.play();
+        if (this.iLv == 3 || this.iLv == 4){
+            anim.play("girlRun");
+        }else if (this.iLv == 5 || this.iLv == 6){
+            anim.play("bothRun");
+        }else
+            anim.play();
         this._gameStatus = 1;
         this._iCount = 0;
         this._idx = 0;
@@ -227,17 +246,18 @@ export default class Level extends cc.Component {
         anim.stop();
         this.ndResult.active = true;
         this._ndMap.active = false;
-        this.showCount();
-        var lv = cc.sys.localStorage.getItem("level");
-        if (lv == this.iLv) cc.sys.localStorage.setItem("level", this.iLv+1);
+        this.ndPlayer.active = false;
         this._bPlayTime = false;
         this.stopAudio();
+        this.showResult();
+        var lv = cc.sys.localStorage.getItem("level");
+        if (lv == null || lv == this.iLv) cc.sys.localStorage.setItem("level", this.iLv+1);
     }
 
     playAudio () {
         // return current audio object
-        cc.log("this.audioTask = ", this.audioTask);
         this._audioID = cc.audioEngine.play(this.audioTask, false, 1);
+        cc.log("this.audioTask = ", this.audioTask, this._audioID);
     }
 
     stopAudio () {
@@ -270,6 +290,12 @@ export default class Level extends cc.Component {
             this.mapRoot.y = mapSize.height/2;
             this.ndPlayer.y = -mapSize.height/2 + tileSize.height/2;
             this.ndLine.y = this.ndPlayer.y;
+            // this.playSound("click");
+            if (this.iLv == 3 || this.iLv == 4){
+                this.ndPlayer.getComponent(cc.Sprite).spriteFrame = this.sptGirl;
+            }else if (this.iLv == 5 || this.iLv == 6){
+                
+            }
         });
     }
 

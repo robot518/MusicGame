@@ -1,0 +1,44 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "grilRun",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.8,
+  "sample": 5,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "09343f50-d4da-4133-8880-ce68fbc80c69"
+            }
+          },
+          {
+            "frame": 0.2,
+            "value": {
+              "__uuid__": "27902dd4-7b2a-457c-8687-e66f0d72c0de"
+            }
+          },
+          {
+            "frame": 0.4,
+            "value": {
+              "__uuid__": "8648d0ae-c3fb-4fbf-bcb1-e9d12dfba8a8"
+            }
+          },
+          {
+            "frame": 0.6,
+            "value": {
+              "__uuid__": "4f60999e-f5e8-4187-9780-9992d7ca007a"
+            }
+          }
+        ]
+      }
+    },
+    "props": {}
+  },
+  "events": []
+}

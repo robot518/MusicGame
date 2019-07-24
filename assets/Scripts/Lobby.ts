@@ -134,9 +134,9 @@ export default class Lobby extends cc.Component {
         // cc.sys.localStorage.setItem("level", 1);
         var count = cc.sys.localStorage.getItem("level") || 1;
         cc.log("count = ", count);
-        count = 6;
         var children = this.ndContent.children;
-        for (let i = 0; i < 4; i++) {
+        count = 6;
+        for (let i = 0; i < 6; i++) {
             cc.find("play", children[i]).on("click", function (argument) {
                 this.playSound("click");
                 if (i < count){
@@ -148,18 +148,19 @@ export default class Lobby extends cc.Component {
                 }
             }, this);
         };
-        for (let i = 4; i < 6; i++) {
-            this.playSound("click");
-            cc.find("play", children[i]).on("click", function (argument) {
-                this.onWxEvent("showVideo");
-            }, this);
-        };
+        // for (let i = 4; i < 6; i++) {
+        //     this.playSound("click");
+        //     cc.find("play", children[i]).on("click", function (argument) {
+        //         this.onWxEvent("showVideo");
+        //     }, this);
+        // };
     }
 
     loadMusic(){
         this.ndLoad.active = true;
         this.labLoad.string = "下载中...";
         var remoteUrl = "http://47.111.184.119/MusicGame/Lv"+this._iLv+".mp3";
+        // var remoteUrl = "http://47.111.184.119/MusicGame/Lv"+3+".mp3";
         cc.loader.load({url: remoteUrl, type: "mp3"}, this.onProgress.bind(this), this.onComplete.bind(this));
     }
 
