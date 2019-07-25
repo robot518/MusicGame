@@ -81,7 +81,7 @@ export default class Level extends cc.Component {
             this._ndMap.parent.x -= dx;
             this._ndMap.parent.y -= dy;
             var pos = this._bMove == true ? this._getTilePos(cc.v2(this.ndPlayer.x, this.ndPlayer.y)) : this._getTilePos(cc.v2(this._vDesPos.x, this._vDesPos.y));
-            if (this.iLv == 1 && pos.x == 168 && pos.y == 116) {
+            if (this.iLv == 1 && pos.x == 65 && pos.y == 27) {
                 this.gameOver();
             }else if(this.iLv == 2 && pos.x == 50 && pos.y == 25){
                 this.gameOver();
@@ -94,12 +94,15 @@ export default class Level extends cc.Component {
             }else if(this.iLv == 6 && pos.x == 68 && pos.y == 28){
                 this.gameOver();
             } else {
-                var id = this._layerFloor.getTileGIDAt(pos);
+                var mapSize = this._ndMap.getContentSize();
+                var tileSize = this._tiledMap.getTileSize();
+                var l = mapSize.width/tileSize.width;
+                var id = 0;
+                if (pos.x >= 0 && pos.y >= 0 && pos.x < l && pos.y < l)
+                    id = this._layerFloor.getTileGIDAt(pos);
                 // cc.log(pos.x, pos.y, id);
                 if (id == 0) {
                     this._iCount++;
-                    this.turnTo();
-
                     // var p = this._getNewPos();
                     // this.ndPlayer.x += p.x;
                     // this.ndPlayer.y += p.y;
@@ -108,11 +111,10 @@ export default class Level extends cc.Component {
                     // this._gameStatus = 3;
 
                     if (this._bMove == true){
-                        this.ndPlayer.x -= 10*dx;
+                        this.ndPlayer.x -= this._speed > 0 ? tileSize.width/4 : -tileSize.width/4;
+                        // this.ndPlayer.x -= 10*dx;
                         this._vDesPos.x = this.ndPlayer.x;
                         this._vDesPos.y = this.ndPlayer.y;
-                        // var tileSize = this._tiledMap.getTileSize();
-                        // this.ndPlayer.x -= this._speed > 0 ? tileSize.width/2 : -tileSize.width/2;
 
                         this._bMove = false;
                         var seq = cc.sequence(cc.delayTime(2), cc.callFunc(()=>{
@@ -122,6 +124,8 @@ export default class Level extends cc.Component {
                         }))
                         this.ndPlayer.runAction(seq);
                     }else this._vDesPos.x -= 10*dx;
+
+                    this.turnTo();
                 }
             }
             // this.drawLine(cc.v2(dx, dy));
@@ -224,8 +228,8 @@ export default class Level extends cc.Component {
             anim.play("girlRun");
         }else if (this.iLv == 5 || this.iLv == 6){
             anim.play("bothRun");
-        }else
-            anim.play();
+        }else anim.play();
+        this._speed = SPEED;
         this._gameStatus = 1;
         this._iCount = 0;
         this._idx = 0;
@@ -239,7 +243,7 @@ export default class Level extends cc.Component {
         // this.tTime.push(0+"");
 
         // this.LvData = [[0,1],[6,7],[-5,18],[3,26],[-2,31],[3,36],[-3,42],[3,48],[0,51],[4,55],[-4,63],[4,71],[-2,77],[3,82],[-1,86],[2,89],[-1,92],[2,95],[-1,98]];
-        this._speed = SPEED;
+        
         this.playAudio();
     }
 
@@ -258,13 +262,11 @@ export default class Level extends cc.Component {
     }
 
     playAudio () {
-        if (!CC_WECHATGAME){
-            this._audioID = cc.audioEngine.play(this.audioTask, false, 1);
-            cc.log("this.audioTask = ", this.audioTask, this._audioID);
-        }else{
-            cc.log("this.audioTask = ", this.audioTask);
+        if (CC_WECHATGAME){
             this.audioTask.play();
-            this.audioTask.volume = 1;
+            // this.audioTask.volume = 1;
+        }else{
+            this._audioID = cc.audioEngine.play(this.audioTask, false, 1);
         }
     }
 
@@ -272,19 +274,27 @@ export default class Level extends cc.Component {
         if (CC_WECHATGAME){
             var self = this;
             wx.onAudioInterruptionBegin(()=>{
-                console.log("self.audioTask.paused Begin = " + self.audioTask.paused);
+                // console.log("self.audioTask.paused Begin = " + (self.audioTask && self.audioTask.paused));
                 self._gameStatus = 4;
-            })
+            });
             wx.onAudioInterruptionEnd(()=>{
-                console.log("self.audioTask.paused End = " + self.audioTask.paused);
+                // console.log("self.audioTask.paused End = " + (self.audioTask && self.audioTask.paused));
                 self._gameStatus = 1;
                 self.audioTask.play();
-            })
+            });
+            if (cc.sys.os === cc.sys.OS_ANDROID){
+                wx.onShow(()=>{
+                    // console.log("self.audioTask.paused onShow = " + (self.audioTask && self.audioTask.paused));
+                    if (self.audioTask && self.audioTask.paused)
+                        self.audioTask.play();
+                });
+            }
         }
     }
 
     stopAudio () {
-        if (!CC_WECHATGAME) cc.audioEngine.stop(this._audioID);
+        if (CC_WECHATGAME) return;
+        cc.audioEngine.stop(this._audioID);
     }
 
     playSound(sName){

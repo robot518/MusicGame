@@ -12,6 +12,9 @@ export default class Lobby extends cc.Component {
     @property(cc.Label)
     labLoad: cc.Label = null;
 
+    @property(cc.AudioSource)
+    music: cc.AudioSource = null;
+
     @property({
         type: cc.AudioClip
     })
@@ -20,6 +23,7 @@ export default class Lobby extends cc.Component {
     _iLv: number = 1;
     _videoAd: any;
     _bannerAd: any;
+    _bLoaded: boolean;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -48,7 +52,7 @@ export default class Lobby extends cc.Component {
     }
 
     initParas(){
-        
+        this._bLoaded = false;
     }
 
     initEvent(){
@@ -58,6 +62,13 @@ export default class Lobby extends cc.Component {
         }, this);
         this.onWxEvent("initBanner");
         this.onWxEvent("initVideo");
+        if (CC_WECHATGAME && cc.sys.os === cc.sys.OS_ANDROID){
+            var self = this;
+            wx.onShow(()=>{
+                // console.log("self.music.isPlaying = " + (self.music && self.music.isPlaying));
+                if (self.music) self.music.play();
+            });
+        }
     }
 
     initShow(){
@@ -166,9 +177,7 @@ export default class Lobby extends cc.Component {
         this.ndLoad.active = true;
         this.labLoad.string = "下载中...";
         var remoteUrl = "http://47.111.184.119/MusicGame/Lv"+this._iLv+".mp3";
-        if (!CC_WECHATGAME) {
-            cc.loader.load({url: remoteUrl, type: "mp3"}, this.onProgress.bind(this), this.onComplete.bind(this));
-        }else {
+        if (CC_WECHATGAME) {
             let audio = wx.createInnerAudioContext();
             audio.src = remoteUrl;
             audio.onError((res)=>{
@@ -176,10 +185,13 @@ export default class Lobby extends cc.Component {
                 console.log(res.errCode);
             });
             audio.onCanplay(()=>{
-                console.log("可以播放");
-                this.labLoad.string = "下载完成";
+                // console.log("可以播放");
+                // this.labLoad.string = "下载完成";
+                if (this._bLoaded == true) return;
                 this.loadLvScene(audio);
             });
+        }else {
+            cc.loader.load({url: remoteUrl, type: "mp3"}, this.onProgress.bind(this), this.onComplete.bind(this));
         }
     }
 
@@ -199,6 +211,8 @@ export default class Lobby extends cc.Component {
 
     loadLvScene(res){
         var lv = this._iLv;
+        // console.log("lv = " + lv);
+        this._bLoaded = true;
         cc.director.loadScene("Level", function (err, scene) {
             var obj = scene.getChildByName("Canvas").getComponent("Level");
             obj.audioTask = res;

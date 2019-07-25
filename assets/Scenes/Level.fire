@@ -1471,7 +1471,7 @@
     "_position": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 7250,
+      "y": 0,
       "z": 0
     },
     "_scale": {
@@ -1532,7 +1532,7 @@
     "_position": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -7225,
+      "y": 0,
       "z": 0
     },
     "_scale": {
@@ -1649,7 +1649,7 @@
     "_position": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -7225,
+      "y": 0,
       "z": 0
     },
     "_scale": {
@@ -2341,10 +2341,10 @@
       "__id__": 41
     },
     "sptGirl": {
-      "__uuid__": "09343f50-d4da-4133-8880-ce68fbc80c69"
+      "__uuid__": "f359e125-35d1-4e84-b01f-2aea7a324409"
     },
     "sptBoth": {
-      "__uuid__": "4d2d696a-afad-4142-ae34-4b02d3244c5f"
+      "__uuid__": "a4b11925-5626-4d23-a8c2-8f6aec771767"
     },
     "audioClick": {
       "__uuid__": "ec5bd511-ae0f-4f1d-b0db-e2a960f83663"

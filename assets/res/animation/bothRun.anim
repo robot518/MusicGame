@@ -3,7 +3,7 @@
   "_name": "bothRun",
   "_objFlags": 0,
   "_native": "",
-  "_duration": 0.8,
+  "_duration": 1.2,
   "sample": 5,
   "speed": 1,
   "wrapMode": 2,
@@ -14,25 +14,37 @@
           {
             "frame": 0,
             "value": {
-              "__uuid__": "4d2d696a-afad-4142-ae34-4b02d3244c5f"
+              "__uuid__": "a4b11925-5626-4d23-a8c2-8f6aec771767"
             }
           },
           {
             "frame": 0.2,
             "value": {
-              "__uuid__": "fb8320a5-3f01-42c7-abdf-1f20ca6bef2f"
+              "__uuid__": "ecd7e987-8aa8-4352-9dbf-fe229d2f24d7"
             }
           },
           {
             "frame": 0.4,
             "value": {
-              "__uuid__": "dedf2cfa-fcde-4123-b8fd-71068ff1b607"
+              "__uuid__": "bb88a405-b52f-416c-8d31-ec9baecaeea1"
             }
           },
           {
             "frame": 0.6,
             "value": {
-              "__uuid__": "20a9cc76-596b-4c47-b648-d4b595f75198"
+              "__uuid__": "c83981e5-0ac1-48d4-9c7e-7c17aea4cc37"
+            }
+          },
+          {
+            "frame": 0.8,
+            "value": {
+              "__uuid__": "2737cc4d-19b3-454a-b4c5-eb9bb6d0b3ea"
+            }
+          },
+          {
+            "frame": 1,
+            "value": {
+              "__uuid__": "5ca858b2-e2f0-439a-b594-83331fc6358f"
             }
           }
         ]

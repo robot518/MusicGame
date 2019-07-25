@@ -1,9 +1,9 @@
 {
   "__type__": "cc.AnimationClip",
-  "_name": "grilRun",
+  "_name": "girlRun",
   "_objFlags": 0,
   "_native": "",
-  "_duration": 0.8,
+  "_duration": 1.2,
   "sample": 5,
   "speed": 1,
   "wrapMode": 2,
@@ -14,25 +14,37 @@
           {
             "frame": 0,
             "value": {
-              "__uuid__": "09343f50-d4da-4133-8880-ce68fbc80c69"
+              "__uuid__": "f359e125-35d1-4e84-b01f-2aea7a324409"
             }
           },
           {
             "frame": 0.2,
             "value": {
-              "__uuid__": "27902dd4-7b2a-457c-8687-e66f0d72c0de"
+              "__uuid__": "38f63f24-494b-4003-bfcd-8a3956f6764e"
             }
           },
           {
             "frame": 0.4,
             "value": {
-              "__uuid__": "8648d0ae-c3fb-4fbf-bcb1-e9d12dfba8a8"
+              "__uuid__": "9f036b73-087c-42f1-893b-c58ef9d10477"
             }
           },
           {
             "frame": 0.6,
             "value": {
-              "__uuid__": "4f60999e-f5e8-4187-9780-9992d7ca007a"
+              "__uuid__": "d2583137-9ba7-4cfa-9816-572dea72588d"
+            }
+          },
+          {
+            "frame": 0.8,
+            "value": {
+              "__uuid__": "bca9edad-5277-40f0-af99-858aefaf8331"
+            }
+          },
+          {
+            "frame": 1,
+            "value": {
+              "__uuid__": "f9c97e2f-a602-437c-9561-58fd7223b6cd"
             }
           }
         ]
