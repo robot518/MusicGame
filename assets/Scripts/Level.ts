@@ -264,6 +264,7 @@ export default class Level extends cc.Component {
         }else{
             cc.log("this.audioTask = ", this.audioTask);
             this.audioTask.play();
+            this.audioTask.volume = 1;
         }
     }
 
@@ -271,9 +272,11 @@ export default class Level extends cc.Component {
         if (CC_WECHATGAME){
             var self = this;
             wx.onAudioInterruptionBegin(()=>{
+                console.log("self.audioTask.paused Begin = " + self.audioTask.paused);
                 self._gameStatus = 4;
             })
             wx.onAudioInterruptionEnd(()=>{
+                console.log("self.audioTask.paused End = " + self.audioTask.paused);
                 self._gameStatus = 1;
                 self.audioTask.play();
             })

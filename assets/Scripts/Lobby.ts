@@ -110,6 +110,12 @@ export default class Lobby extends cc.Component {
                 // });
                 break;
             case "share":
+                // var id = '' // 通过 MP 系统审核的图片编号
+                // var url = '' // 通过 MP 系统审核的图片地址
+                // wx.shareAppMessage({
+                //     imageUrlId: id,
+                //     imageUrl: url
+                // })
                 wx.shareAppMessage({
                     title: "你来挑战我啊！",
                     imageUrl: canvas.toTempFilePathSync({
