@@ -28,12 +28,15 @@ export default class Level extends cc.Component {
     @property(cc.SpriteFrame)
     sptGirl: cc.SpriteFrame = null;
 
+    @property(cc.SpriteFrame)
+    sptBoth: cc.SpriteFrame = null;
+
     @property({
         type: cc.AudioClip
     })
     audioClick: cc.AudioClip = null;
     
-    _gameStatus: number;
+    _gameStatus: number; //0准备开始 1游戏中 2游戏结束 3暂停游戏 4音乐中断
     _speed: number;
     _iCount: number;
     _idx: number;
@@ -255,13 +258,30 @@ export default class Level extends cc.Component {
     }
 
     playAudio () {
-        // return current audio object
-        this._audioID = cc.audioEngine.play(this.audioTask, false, 1);
-        cc.log("this.audioTask = ", this.audioTask, this._audioID);
+        if (!CC_WECHATGAME){
+            this._audioID = cc.audioEngine.play(this.audioTask, false, 1);
+            cc.log("this.audioTask = ", this.audioTask, this._audioID);
+        }else{
+            cc.log("this.audioTask = ", this.audioTask);
+            this.audioTask.play();
+        }
+    }
+
+    onAudioEvent(){
+        if (CC_WECHATGAME){
+            var self = this;
+            wx.onAudioInterruptionBegin(()=>{
+                self._gameStatus = 4;
+            })
+            wx.onAudioInterruptionEnd(()=>{
+                self._gameStatus = 1;
+                self.audioTask.play();
+            })
+        }
     }
 
     stopAudio () {
-        cc.audioEngine.stop(this._audioID);
+        if (!CC_WECHATGAME) cc.audioEngine.stop(this._audioID);
     }
 
     playSound(sName){
@@ -290,12 +310,12 @@ export default class Level extends cc.Component {
             this.mapRoot.y = mapSize.height/2;
             this.ndPlayer.y = -mapSize.height/2 + tileSize.height/2;
             this.ndLine.y = this.ndPlayer.y;
-            // this.playSound("click");
             if (this.iLv == 3 || this.iLv == 4){
                 this.ndPlayer.getComponent(cc.Sprite).spriteFrame = this.sptGirl;
             }else if (this.iLv == 5 || this.iLv == 6){
-                
+                this.ndPlayer.getComponent(cc.Sprite).spriteFrame = this.sptBoth;
             }
+            this.onAudioEvent();
         });
     }
 

@@ -160,8 +160,21 @@ export default class Lobby extends cc.Component {
         this.ndLoad.active = true;
         this.labLoad.string = "下载中...";
         var remoteUrl = "http://47.111.184.119/MusicGame/Lv"+this._iLv+".mp3";
-        // var remoteUrl = "http://47.111.184.119/MusicGame/Lv"+3+".mp3";
-        cc.loader.load({url: remoteUrl, type: "mp3"}, this.onProgress.bind(this), this.onComplete.bind(this));
+        if (!CC_WECHATGAME) {
+            cc.loader.load({url: remoteUrl, type: "mp3"}, this.onProgress.bind(this), this.onComplete.bind(this));
+        }else {
+            let audio = wx.createInnerAudioContext();
+            audio.src = remoteUrl;
+            audio.onError((res)=>{
+                console.log(res.errMsg);
+                console.log(res.errCode);
+            });
+            audio.onCanplay(()=>{
+                console.log("可以播放");
+                this.labLoad.string = "下载完成";
+                this.loadLvScene(audio);
+            });
+        }
     }
 
     onProgress(completedCount, totalCount){

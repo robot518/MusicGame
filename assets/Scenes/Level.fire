@@ -2343,6 +2343,9 @@
     "sptGirl": {
       "__uuid__": "09343f50-d4da-4133-8880-ce68fbc80c69"
     },
+    "sptBoth": {
+      "__uuid__": "4d2d696a-afad-4142-ae34-4b02d3244c5f"
+    },
     "audioClick": {
       "__uuid__": "ec5bd511-ae0f-4f1d-b0db-e2a960f83663"
     },
