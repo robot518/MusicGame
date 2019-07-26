@@ -277,15 +277,15 @@ export default class Level extends cc.Component {
     onAudioEvent(){
         if (CC_WECHATGAME){
             var self = this;
-            // wx.onAudioInterruptionBegin(()=>{
-            //     console.log("self.audioTask.paused Begin = " + (self.audioTask && self.audioTask.paused));
-            //     self._gameStatus = 4;
-            // });
-            // wx.onAudioInterruptionEnd(()=>{
-            //     console.log("self.audioTask.paused End = " + (self.audioTask && self.audioTask.paused));
-            //     self._gameStatus = 1;
-            //     self.audioTask.play();
-            // });
+            wx.onAudioInterruptionBegin(()=>{
+                console.log("self.audioTask.paused Begin = " + (self.audioTask && self.audioTask.paused));
+                self._gameStatus = 4;
+            });
+            wx.onAudioInterruptionEnd(()=>{
+                console.log("self.audioTask.paused End = " + (self.audioTask && self.audioTask.paused));
+                self._gameStatus = 1;
+                self.audioTask.play();
+            });
             self.audioTask.onEnded(()=>{
                 self.gameOver();
             });
