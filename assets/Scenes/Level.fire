@@ -1521,8 +1521,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 89,
-      "height": 226
+      "width": 83,
+      "height": 237
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1571,10 +1571,10 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "4d2d696a-afad-4142-ae34-4b02d3244c5f"
+      "__uuid__": "feb5d95f-11ab-4c74-858d-f4051f5185d8"
     },
     "_type": 0,
-    "_sizeMode": 2,
+    "_sizeMode": 1,
     "_fillType": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
@@ -2341,10 +2341,10 @@
       "__id__": 41
     },
     "sptGirl": {
-      "__uuid__": "f359e125-35d1-4e84-b01f-2aea7a324409"
+      "__uuid__": "2834e0a8-e1ab-4ab2-a237-d57b6166d561"
     },
     "sptBoth": {
-      "__uuid__": "a4b11925-5626-4d23-a8c2-8f6aec771767"
+      "__uuid__": "6b03b8b6-517a-45af-ae99-c9175caca1e2"
     },
     "audioClick": {
       "__uuid__": "ec5bd511-ae0f-4f1d-b0db-e2a960f83663"

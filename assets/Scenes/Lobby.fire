@@ -3454,8 +3454,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 150,
-      "height": 60
+      "width": 162,
+      "height": 93
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -3517,8 +3517,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 150,
-      "height": 59.99999999999999
+      "width": 162,
+      "height": 93
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -3528,7 +3528,7 @@
     "_position": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -3.552713678800501e-15,
+      "y": 0,
       "z": 0
     },
     "_scale": {
@@ -3567,10 +3567,10 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "883ab487-f64d-431f-8532-d0844eca3776"
+      "__uuid__": "faccac15-ea66-4021-ad50-e3493de83dfd"
     },
     "_type": 1,
-    "_sizeMode": 0,
+    "_sizeMode": 2,
     "_fillType": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
@@ -3596,8 +3596,8 @@
     "_alignFlags": 45,
     "_left": -7.105427357601002e-15,
     "_right": 0,
-    "_top": 7.105427357601002e-15,
-    "_bottom": 0,
+    "_top": 3.552713678800501e-15,
+    "_bottom": -3.552713678800501e-15,
     "_verticalCenter": 0,
     "_horizontalCenter": 0,
     "_isAbsLeft": true,
@@ -4360,8 +4360,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 150,
-      "height": 60
+      "width": 162,
+      "height": 93
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -4423,8 +4423,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 150,
-      "height": 59.99999999999999
+      "width": 162,
+      "height": 93
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -4434,7 +4434,7 @@
     "_position": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -3.552713678800501e-15,
+      "y": 0,
       "z": 0
     },
     "_scale": {
@@ -4473,7 +4473,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "883ab487-f64d-431f-8532-d0844eca3776"
+      "__uuid__": "faccac15-ea66-4021-ad50-e3493de83dfd"
     },
     "_type": 1,
     "_sizeMode": 0,
@@ -5266,8 +5266,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 150,
-      "height": 60
+      "width": 162,
+      "height": 93
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -5329,8 +5329,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 150,
-      "height": 59.99999999999999
+      "width": 162,
+      "height": 93
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -5340,7 +5340,7 @@
     "_position": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -3.552713678800501e-15,
+      "y": 0,
       "z": 0
     },
     "_scale": {
@@ -5379,7 +5379,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "883ab487-f64d-431f-8532-d0844eca3776"
+      "__uuid__": "faccac15-ea66-4021-ad50-e3493de83dfd"
     },
     "_type": 1,
     "_sizeMode": 0,
@@ -6172,8 +6172,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 150,
-      "height": 60
+      "width": 162,
+      "height": 93
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -6235,8 +6235,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 150,
-      "height": 59.99999999999999
+      "width": 162,
+      "height": 93
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -6246,7 +6246,7 @@
     "_position": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -3.552713678800501e-15,
+      "y": 0,
       "z": 0
     },
     "_scale": {
@@ -6285,10 +6285,10 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "883ab487-f64d-431f-8532-d0844eca3776"
+      "__uuid__": "faccac15-ea66-4021-ad50-e3493de83dfd"
     },
     "_type": 1,
-    "_sizeMode": 0,
+    "_sizeMode": 2,
     "_fillType": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
@@ -6314,8 +6314,8 @@
     "_alignFlags": 45,
     "_left": -7.105427357601002e-15,
     "_right": 0,
-    "_top": 7.105427357601002e-15,
-    "_bottom": 0,
+    "_top": 3.552713678800501e-15,
+    "_bottom": -3.552713678800501e-15,
     "_verticalCenter": 0,
     "_horizontalCenter": 0,
     "_isAbsLeft": true,

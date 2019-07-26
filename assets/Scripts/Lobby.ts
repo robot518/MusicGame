@@ -153,7 +153,7 @@ export default class Lobby extends cc.Component {
         cc.log("count = ", count);
         var children = this.ndContent.children;
         count = 6;
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 2; i++) {
             cc.find("play", children[i]).on("click", function (argument) {
                 this.playSound("click");
                 if (i < count){
@@ -165,12 +165,12 @@ export default class Lobby extends cc.Component {
                 }
             }, this);
         };
-        // for (let i = 4; i < 6; i++) {
-        //     this.playSound("click");
-        //     cc.find("play", children[i]).on("click", function (argument) {
-        //         this.onWxEvent("showVideo");
-        //     }, this);
-        // };
+        for (let i = 2; i < 6; i++) {
+            cc.find("play", children[i]).on("click", function (argument) {
+                this.playSound("click");
+                this.onWxEvent("showVideo");
+            }, this);
+        };
     }
 
     loadMusic(){
@@ -220,6 +220,7 @@ export default class Lobby extends cc.Component {
             var url = 'map/Lv'+lv;
             // var url = "map/Lv"+this.iLv;
             obj.onCreateTileMap(url);
+            res.offCanplay();
         });
     }
 

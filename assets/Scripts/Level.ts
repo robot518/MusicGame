@@ -81,19 +81,19 @@ export default class Level extends cc.Component {
             this._ndMap.parent.x -= dx;
             this._ndMap.parent.y -= dy;
             var pos = this._bMove == true ? this._getTilePos(cc.v2(this.ndPlayer.x, this.ndPlayer.y)) : this._getTilePos(cc.v2(this._vDesPos.x, this._vDesPos.y));
-            if (this.iLv == 1 && pos.x == 65 && pos.y == 27) {
-                this.gameOver();
-            }else if(this.iLv == 2 && pos.x == 50 && pos.y == 25){
-                this.gameOver();
-            }else if(this.iLv == 3 && pos.x == 54 && pos.y == 26){
-                this.gameOver();
-            }else if(this.iLv == 4 && pos.x == 40 && pos.y == 36){
-                this.gameOver();
-            }else if(this.iLv == 5 && pos.x == 67 && pos.y == 32){
-                this.gameOver();
-            }else if(this.iLv == 6 && pos.x == 68 && pos.y == 28){
-                this.gameOver();
-            } else {
+            // if (this.iLv == 1 && pos.x == 65 && pos.y == 27) {
+            //     this.gameOver();
+            // }else if(this.iLv == 2 && pos.x == 50 && pos.y == 20){
+            //     this.gameOver();
+            // }else if(this.iLv == 3 && pos.x == 54 && pos.y == 26){
+            //     this.gameOver();
+            // }else if(this.iLv == 4 && pos.x == 40 && pos.y == 33){
+            //     this.gameOver();
+            // }else if(this.iLv == 5 && pos.x == 67 && pos.y == 32){
+            //     this.gameOver();
+            // }else if(this.iLv == 6 && pos.x == 68 && pos.y == 28){
+            //     this.gameOver();
+            // } else {
                 var mapSize = this._ndMap.getContentSize();
                 var tileSize = this._tiledMap.getTileSize();
                 var l = mapSize.width/tileSize.width;
@@ -111,7 +111,8 @@ export default class Level extends cc.Component {
                     // this._gameStatus = 3;
 
                     if (this._bMove == true){
-                        this.ndPlayer.x -= this._speed > 0 ? tileSize.width/4 : -tileSize.width/4;
+                        this.ndPlayer.x -= dx;
+                        this.ndPlayer.x -= this._speed > 0 ? tileSize.width/10 : -tileSize.width/10;
                         // this.ndPlayer.x -= 10*dx;
                         this._vDesPos.x = this.ndPlayer.x;
                         this._vDesPos.y = this.ndPlayer.y;
@@ -123,11 +124,14 @@ export default class Level extends cc.Component {
                             this.ndPlayer.y = this._vDesPos.y;
                         }))
                         this.ndPlayer.runAction(seq);
-                    }else this._vDesPos.x -= 10*dx;
+                    }else {
+                        this._vDesPos.x -= dx;
+                        this._vDesPos.x -= this._speed > 0 ? tileSize.width/10 : -tileSize.width/10;
+                    }
 
                     this.turnTo();
                 }
-            }
+            // }
             // this.drawLine(cc.v2(dx, dy));
         }
         // if (this._bPlayTime == true){
@@ -273,22 +277,25 @@ export default class Level extends cc.Component {
     onAudioEvent(){
         if (CC_WECHATGAME){
             var self = this;
-            wx.onAudioInterruptionBegin(()=>{
-                // console.log("self.audioTask.paused Begin = " + (self.audioTask && self.audioTask.paused));
-                self._gameStatus = 4;
+            // wx.onAudioInterruptionBegin(()=>{
+            //     console.log("self.audioTask.paused Begin = " + (self.audioTask && self.audioTask.paused));
+            //     self._gameStatus = 4;
+            // });
+            // wx.onAudioInterruptionEnd(()=>{
+            //     console.log("self.audioTask.paused End = " + (self.audioTask && self.audioTask.paused));
+            //     self._gameStatus = 1;
+            //     self.audioTask.play();
+            // });
+            self.audioTask.onEnded(()=>{
+                self.gameOver();
             });
-            wx.onAudioInterruptionEnd(()=>{
-                // console.log("self.audioTask.paused End = " + (self.audioTask && self.audioTask.paused));
-                self._gameStatus = 1;
-                self.audioTask.play();
-            });
-            if (cc.sys.os === cc.sys.OS_ANDROID){
+            // if (cc.sys.os === cc.sys.OS_ANDROID){
                 wx.onShow(()=>{
-                    // console.log("self.audioTask.paused onShow = " + (self.audioTask && self.audioTask.paused));
+                    console.log("self.audioTask.paused onShow = " + (self.audioTask && self.audioTask.paused));
                     if (self.audioTask && self.audioTask.paused)
                         self.audioTask.play();
                 });
-            }
+            // }
         }
     }
 
