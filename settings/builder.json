@@ -37,7 +37,7 @@
   },
   "startScene": "6d631bca-351c-4a85-8b44-10c36f4d43b6",
   "title": "MusicGame",
-  "webOrientation": "auto",
+  "webOrientation": "portrait",
   "wechatgame": {
     "REMOTE_SERVER_ROOT": "",
     "appid": "wx6ac3f5090a6b99c5",

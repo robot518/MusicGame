@@ -81,63 +81,70 @@ export default class Level extends cc.Component {
             this._ndMap.parent.x -= dx;
             this._ndMap.parent.y -= dy;
             var pos = this._bMove == true ? this._getTilePos(cc.v2(this.ndPlayer.x, this.ndPlayer.y)) : this._getTilePos(cc.v2(this._vDesPos.x, this._vDesPos.y));
-            // if (this.iLv == 1 && pos.x == 65 && pos.y == 27) {
-            //     this.gameOver();
-            // }else if(this.iLv == 2 && pos.x == 50 && pos.y == 20){
-            //     this.gameOver();
-            // }else if(this.iLv == 3 && pos.x == 54 && pos.y == 26){
-            //     this.gameOver();
-            // }else if(this.iLv == 4 && pos.x == 40 && pos.y == 33){
-            //     this.gameOver();
-            // }else if(this.iLv == 5 && pos.x == 67 && pos.y == 32){
-            //     this.gameOver();
-            // }else if(this.iLv == 6 && pos.x == 68 && pos.y == 28){
-            //     this.gameOver();
-            // } else {
-                var mapSize = this._ndMap.getContentSize();
-                var tileSize = this._tiledMap.getTileSize();
-                var l = mapSize.width/tileSize.width;
-                var id = 0;
-                if (pos.x >= 0 && pos.y >= 0 && pos.x < l && pos.y < l)
-                    id = this._layerFloor.getTileGIDAt(pos);
-                // cc.log(pos.x, pos.y, id);
-                if (id == 0) {
-                    this._iCount++;
-                    // var p = this._getNewPos();
-                    // this.ndPlayer.x += p.x;
-                    // this.ndPlayer.y += p.y;
-                    // this._ndMap.x -= 2*p.x;
-                    // this._ndMap.y -= 2*p.y;
-                    // this._gameStatus = 3;
-
-                    if (this._bMove == true){
-                        this.ndPlayer.x -= dx;
-                        this.ndPlayer.x -= this._speed > 0 ? tileSize.width/10 : -tileSize.width/10;
-                        // this.ndPlayer.x -= 10*dx;
-                        this._vDesPos.x = this.ndPlayer.x;
-                        this._vDesPos.y = this.ndPlayer.y;
-
-                        this._bMove = false;
-                        var seq = cc.sequence(cc.delayTime(2), cc.callFunc(()=>{
-                            this._bMove = true;
-                            this.ndPlayer.x = this._vDesPos.x;
-                            this.ndPlayer.y = this._vDesPos.y;
-                        }))
-                        this.ndPlayer.runAction(seq);
-                    }else {
-                        this._vDesPos.x -= dx;
-                        this._vDesPos.x -= this._speed > 0 ? tileSize.width/10 : -tileSize.width/10;
-                    }
-
-                    this.turnTo();
+            if (CC_WECHATGAME){
+                this.checkTurnTo(pos, dx);
+            }else{
+                if (this.iLv == 1 && pos.x == 65 && pos.y == 27) {
+                    this.gameOver();
+                }else if(this.iLv == 2 && pos.x == 50 && pos.y == 20){
+                    this.gameOver();
+                }else if(this.iLv == 3 && pos.x == 54 && pos.y == 26){
+                    this.gameOver();
+                }else if(this.iLv == 4 && pos.x == 40 && pos.y == 33){
+                    this.gameOver();
+                }else if(this.iLv == 5 && pos.x == 67 && pos.y == 32){
+                    this.gameOver();
+                }else if(this.iLv == 6 && pos.x == 68 && pos.y == 28){
+                    this.gameOver();
+                }else{
+                    this.checkTurnTo(pos, dx);
                 }
-            // }
+            }
             // this.drawLine(cc.v2(dx, dy));
         }
         // if (this._bPlayTime == true){
         //     this._iTime+=dt;
         //     this.labTime.string = this._iTime.toFixed(2).toString();
         // }
+    }
+
+    checkTurnTo(pos, dx){
+        var mapSize = this._ndMap.getContentSize();
+        var tileSize = this._tiledMap.getTileSize();
+        var l = mapSize.width/tileSize.width;
+        var id = 0;
+        if (pos.x >= 0 && pos.y >= 0 && pos.x < l && pos.y < l)
+            id = this._layerFloor.getTileGIDAt(pos);
+        // cc.log(pos.x, pos.y, id);
+        if (id == 0) {
+            this._iCount++;
+            // var p = this._getNewPos();
+            // this.ndPlayer.x += p.x;
+            // this.ndPlayer.y += p.y;
+            // this._ndMap.x -= 2*p.x;
+            // this._ndMap.y -= 2*p.y;
+            // this._gameStatus = 3;
+
+            if (this._bMove == true){
+                this.ndPlayer.x -= dx;
+                this.ndPlayer.x -= this._speed > 0 ? tileSize.width/10 : -tileSize.width/10;
+                // this.ndPlayer.x -= 10*dx;
+                this._vDesPos.x = this.ndPlayer.x;
+                this._vDesPos.y = this.ndPlayer.y;
+
+                this._bMove = false;
+                var seq = cc.sequence(cc.delayTime(2), cc.callFunc(()=>{
+                    this._bMove = true;
+                    this.ndPlayer.x = this._vDesPos.x;
+                    this.ndPlayer.y = this._vDesPos.y;
+                }))
+                this.ndPlayer.runAction(seq);
+            }else {
+                this._vDesPos.x -= dx;
+                this._vDesPos.x -= this._speed > 0 ? tileSize.width/10 : -tileSize.width/10;
+            }
+            this.turnTo();
+        }
     }
 
     initCanvas(){

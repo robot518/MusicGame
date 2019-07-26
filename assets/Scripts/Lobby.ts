@@ -74,6 +74,7 @@ export default class Lobby extends cc.Component {
     initShow(){
         this.ndLoad.active = false;
         this.showScv();
+        if (!CC_WECHATGAME) cc.find("share", this.node).active = false;
     }
 
     onWxEvent(s){
@@ -190,7 +191,10 @@ export default class Lobby extends cc.Component {
                 if (this._bLoaded == true) return;
                 this.loadLvScene(audio);
             });
+        }else if (!CC_EDITOR) {
+            cc.loader.load({url: remoteUrl, type: "mp3"}, this.onProgress.bind(this), this.onComplete.bind(this));
         }else {
+            remoteUrl = "../MusicGame/Lv"+this._iLv+".mp3";
             cc.loader.load({url: remoteUrl, type: "mp3"}, this.onProgress.bind(this), this.onComplete.bind(this));
         }
     }
@@ -220,7 +224,7 @@ export default class Lobby extends cc.Component {
             var url = 'map/Lv'+lv;
             // var url = "map/Lv"+this.iLv;
             obj.onCreateTileMap(url);
-            res.offCanplay();
+            if (res.offCanplay) res.offCanplay();
         });
     }
 
