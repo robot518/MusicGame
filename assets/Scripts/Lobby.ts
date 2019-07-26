@@ -191,10 +191,8 @@ export default class Lobby extends cc.Component {
                 if (this._bLoaded == true) return;
                 this.loadLvScene(audio);
             });
-        }else if (!CC_EDITOR) {
-            cc.loader.load({url: remoteUrl, type: "mp3"}, this.onProgress.bind(this), this.onComplete.bind(this));
         }else {
-            remoteUrl = "../MusicGame/Lv"+this._iLv+".mp3";
+            // remoteUrl = "../MusicGame/Lv"+this._iLv+".mp3";
             cc.loader.load({url: remoteUrl, type: "mp3"}, this.onProgress.bind(this), this.onComplete.bind(this));
         }
     }
