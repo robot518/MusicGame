@@ -10,7 +10,7 @@ export default class Lobby extends cc.Component {
     ndLoad: cc.Node = null;
 
     @property(cc.Label)
-    labLoad: cc.Label = null;
+    labTime: cc.Label = null;
 
     @property(cc.AudioSource)
     music: cc.AudioSource = null;
@@ -176,21 +176,33 @@ export default class Lobby extends cc.Component {
 
     loadMusic(){
         this.ndLoad.active = true;
-        this.labLoad.string = "下载中...";
         var remoteUrl = "http://47.111.184.119/MusicGame/Lv"+this._iLv+".mp3";
         if (CC_WECHATGAME) {
-            let audio = wx.createInnerAudioContext();
-            audio.src = remoteUrl;
-            audio.onError((res)=>{
-                console.log(res.errMsg);
-                console.log(res.errCode);
-            });
-            audio.onCanplay(()=>{
-                // console.log("可以播放");
-                // this.labLoad.string = "下载完成";
-                if (this._bLoaded == true) return;
-                this.loadLvScene(audio);
-            });
+            // let audio = wx.createInnerAudioContext();
+            // audio.src = remoteUrl;
+            // audio.onError((res)=>{
+            //     console.log(res.errMsg);
+            //     console.log(res.errCode);
+            // });
+            // audio.onCanplay(()=>{
+            //     // console.log("可以播放");
+            //     if (this._bLoaded == true) return;
+            //     this.loadLvScene(audio);
+            // });
+            var self = this;
+            var downTask = wx.downloadFile({
+                url: remoteUrl,
+                success(res){
+                    if (res.statusCode == 200){
+                        let audio = wx.createInnerAudioContext();
+                        audio.src = res.tempFilePath;
+                        self.loadLvScene(audio);
+                    }
+                }
+            })
+            downTask.onProgressUpdate((res)=>{
+                this.labTime.string = res.progress.toString()+"%";
+            })
         }else {
             // remoteUrl = "../MusicGame/Lv"+this._iLv+".mp3";
             cc.loader.load({url: remoteUrl, type: "mp3"}, this.onProgress.bind(this), this.onComplete.bind(this));
@@ -199,7 +211,6 @@ export default class Lobby extends cc.Component {
 
     onProgress(completedCount, totalCount){
         cc.log(completedCount, totalCount);
-        // this.labLoad.string = (100*completedCount/totalCount).toString()+"%";
     }
 
     onComplete(err, res){
@@ -207,7 +218,6 @@ export default class Lobby extends cc.Component {
             console.log(err);
             return;
         }
-        this.labLoad.string = "下载完成";
         this.loadLvScene(res);
     }
 
