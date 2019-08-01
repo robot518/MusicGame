@@ -204,6 +204,8 @@ export default class Lobby extends cc.Component {
                 this.labTime.string = res.progress.toString()+"%";
             })
         }else {
+            this.labTime.node.active = false;
+            //网页版去下载本地
             // remoteUrl = "../MusicGame/Lv"+this._iLv+".mp3";
             cc.loader.load({url: remoteUrl, type: "mp3"}, this.onProgress.bind(this), this.onComplete.bind(this));
         }
