@@ -178,31 +178,32 @@ export default class Lobby extends cc.Component {
         this.ndLoad.active = true;
         var remoteUrl = "http://47.111.184.119/MusicGame/Lv"+this._iLv+".mp3";
         if (CC_WECHATGAME) {
-            // let audio = wx.createInnerAudioContext();
-            // audio.src = remoteUrl;
-            // audio.onError((res)=>{
-            //     console.log(res.errMsg);
-            //     console.log(res.errCode);
-            // });
-            // audio.onCanplay(()=>{
-            //     // console.log("可以播放");
-            //     if (this._bLoaded == true) return;
-            //     this.loadLvScene(audio);
-            // });
-            var self = this;
-            var downTask = wx.downloadFile({
-                url: remoteUrl,
-                success(res){
-                    if (res.statusCode == 200){
-                        let audio = wx.createInnerAudioContext();
-                        audio.src = res.tempFilePath;
-                        self.loadLvScene(audio);
-                    }
-                }
-            })
-            downTask.onProgressUpdate((res)=>{
-                this.labTime.string = res.progress.toString()+"%";
-            })
+            let audio = wx.createInnerAudioContext();
+            this.labTime.node.active = false;
+            audio.src = remoteUrl;
+            audio.onError((res)=>{
+                console.log(res.errMsg);
+                console.log(res.errCode);
+            });
+            audio.onCanplay(()=>{
+                // console.log("可以播放");
+                if (this._bLoaded == true) return;
+                this.loadLvScene(audio);
+            });
+            // var self = this;
+            // var downTask = wx.downloadFile({
+            //     url: remoteUrl,
+            //     success(res){
+            //         if (res.statusCode == 200){
+            //             let audio = wx.createInnerAudioContext();
+            //             audio.src = res.tempFilePath;
+            //             self.loadLvScene(audio);
+            //         }
+            //     }
+            // })
+            // downTask.onProgressUpdate((res)=>{
+            //     this.labTime.string = res.progress.toString()+"%";
+            // })
         }else {
             this.labTime.node.active = false;
             //网页版去下载本地
