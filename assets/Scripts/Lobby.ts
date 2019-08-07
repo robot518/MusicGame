@@ -79,55 +79,54 @@ export default class Lobby extends cc.Component {
 
     onWxEvent(s){
         if (!CC_WECHATGAME) return;
+        let self = this;
         switch(s){
             case "initBanner":
-                // if (this._bannerAd != null)
-                //     this._bannerAd.destory();
-                // var systemInfo = wx.getSystemInfoSync();
-                // this._bannerAd = wx.createBannerAd({
-                //     adUnitId: 'adunit-24778ca4dc4e174a',
-                //     style: {
-                //         left: 0,
-                //         top: systemInfo.windowHeight - 144,
-                //         width: 720,
-                //     }
-                // });
-                // var self = this;
-                // this._bannerAd.onResize(res => {
-                //     if (self._bannerAd)
-                //         self._bannerAd.style.top = systemInfo.windowHeight - self._bannerAd.style.realHeight;
-                // })
-                // this._bannerAd.show();
-                // this._bannerAd.onError(err => {
-                //   console.log(err);
-                //   //无合适广告
-                //   if (err.errCode == 1004){
+                if (this._bannerAd != null) this._bannerAd.show();
+                else{
+                    var systemInfo = wx.getSystemInfoSync();
+                    this._bannerAd = wx.createBannerAd({
+                        adUnitId: 'adunit-92462c04a69b2dc5',
+                        adIntervals: 30,
+                        style: {
+                            left: 0,
+                            top: systemInfo.windowHeight - 144,
+                            width: 720,
+                        }
+                    });
+                    this._bannerAd.onResize(res => {
+                        if (self._bannerAd != null)
+                            self._bannerAd.style.top = systemInfo.windowHeight - self._bannerAd.style.realHeight;
+                    })
+                    this._bannerAd.show();
+                    this._bannerAd.onError(err => {
+                        console.log(err);
+                        //无合适广告
+                        if (err.errCode == 1004){
 
-                //   }
-                // })
+                        }
+                    })
+                }
                 break;
             case "initVideo":
-                // this._videoAd = wx.createRewardedVideoAd({
-                //     adUnitId: 'adunit-a7fcb876faba0c89'
-                // });
-                // this._videoAd.onClose(res => {
-                //     if (res && res.isEnded || res === undefined){
-                //         this.loadMusic();
-                //     }else{
-
-                //     }
-                // });
-                // this._videoAd.onError(err => {
-                //   console.log(err)
-                // });
+                if (this._videoAd == null){
+                    this._videoAd = wx.createRewardedVideoAd({
+                        adUnitId: 'adunit-bfb7593ec3f884b7'
+                    });
+                    this._videoAd.onClose(res => {
+                        if (res && res.isEnded || res === undefined){
+                            self._videoAd.offClose();
+                            self.loadMusic();
+                        }else{
+    
+                        }
+                    });
+                    this._videoAd.onError(err => {
+                      console.log(err)
+                    });
+                }
                 break;
             case "share":
-                // var id = '' // 通过 MP 系统审核的图片编号
-                // var url = '' // 通过 MP 系统审核的图片地址
-                // wx.shareAppMessage({
-                //     imageUrlId: id,
-                //     imageUrl: url
-                // })
                 wx.shareAppMessage({
                     title: "你来挑战我啊！",
                     imageUrl: canvas.toTempFilePathSync({
@@ -137,13 +136,13 @@ export default class Lobby extends cc.Component {
                 });
                 break;
             case "showVideo":
-                // if (self._videoAd != null){
-                //     self._videoAd.show()
-                //     .catch(err => {
-                //         self._videoAd.load()
-                //         .then(() => self._videoAd.show())
-                //     })
-                // }
+                if (self._videoAd != null){
+                    self._videoAd.show()
+                    .catch(err => {
+                        self._videoAd.load()
+                        .then(() => self._videoAd.show())
+                    })
+                }
                 break;
         }
     }
@@ -168,6 +167,7 @@ export default class Lobby extends cc.Component {
         };
         for (let i = 2; i < 6; i++) {
             cc.find("play", children[i]).on("click", function (argument) {
+                this._iLv = i+1;
                 this.playSound("click");
                 this.onWxEvent("showVideo");
             }, this);
@@ -228,6 +228,8 @@ export default class Lobby extends cc.Component {
         var lv = this._iLv;
         // console.log("lv = " + lv);
         this._bLoaded = true;
+        if (this._bannerAd != null) this._bannerAd.hide();
+        if (this._videoAd != null) this._videoAd.offClose();
         cc.director.loadScene("Level", function (err, scene) {
             var obj = scene.getChildByName("Canvas").getComponent("Level");
             obj.audioTask = res;

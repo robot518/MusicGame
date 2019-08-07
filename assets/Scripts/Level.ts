@@ -55,6 +55,7 @@ export default class Level extends cc.Component {
     _bPlayTime: boolean;
     _bMove: boolean;
     _vDesPos: cc.Vec2;
+    _bannerAd: any;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -170,6 +171,7 @@ export default class Level extends cc.Component {
     }
 
     initEvent(){
+        this.onWxEvent("initBanner");
         this.ndBtn.on("click", function (argument) {
             if (this._gameStatus == 0)
                 this.gameStart();
@@ -181,6 +183,7 @@ export default class Level extends cc.Component {
             }
         }, this);
         cc.find("back", this.ndResult).on("click", function (argument) {
+            if (this._bannerAd != null) this._bannerAd.hide();
             cc.director.loadScene("Lobby");
         }, this);
         cc.find("stop", this.node).on("click", function(params) {
@@ -210,6 +213,39 @@ export default class Level extends cc.Component {
         this.ndLine.zIndex = 1;
     }
 
+    onWxEvent(s){
+        if (!CC_WECHATGAME) return;
+        let self = this;
+        switch(s){
+            case "initBanner":
+                if (!this._bannerAd){
+                    var systemInfo = wx.getSystemInfoSync();
+                    this._bannerAd = wx.createBannerAd({
+                        adUnitId: 'adunit-fcdf85d11c96e726',
+                        adIntervals: 30,
+                        style: {
+                            left: 0,
+                            top: systemInfo.windowHeight - 144,
+                            width: 720,
+                        }
+                    });
+                    this._bannerAd.onResize(()=> {
+                        if (self._bannerAd != null)
+                            self._bannerAd.style.top = systemInfo.windowHeight - self._bannerAd.style.realHeight;
+                    })
+                    this._bannerAd.hide();
+                    this._bannerAd.onError(err => {
+                        console.log(err);
+                        //无合适广告
+                        if (err.errCode == 1004){
+
+                        }
+                    })
+                }
+                break;
+        }
+    }
+
     showBg(){
         if (this.iLv == 1) return;
         var self = this;
@@ -219,6 +255,7 @@ export default class Level extends cc.Component {
     }
 
     showResult(){
+        if (this._bannerAd != null) this._bannerAd.show();
         cc.find("lv", this.ndResult).getComponent(cc.Label).string = this.iLv.toString();
         cc.find("times", this.ndResult).getComponent(cc.Label).string = this._iCount.toString();
     }
@@ -291,7 +328,8 @@ export default class Level extends cc.Component {
             wx.onAudioInterruptionEnd(()=>{
                 console.log("self.audioTask.paused End = " + (self.audioTask && self.audioTask.paused));
                 self._gameStatus = 1;
-                self.audioTask.play();
+                if (self.audioTask && self.audioTask.paused)
+                    self.audioTask.play();
             });
             self.audioTask.onEnded(()=>{
                 self.gameOver();
