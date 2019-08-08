@@ -305,8 +305,8 @@ export default class Level extends cc.Component {
         this._bPlayTime = false;
         this.stopAudio();
         this.showResult();
-        var lv = cc.sys.localStorage.getItem("level");
-        if (lv == null || lv == this.iLv) cc.sys.localStorage.setItem("level", this.iLv+1);
+        // var lv = cc.sys.localStorage.getItem("level");
+        // if (lv == null || lv == this.iLv) cc.sys.localStorage.setItem("level", this.iLv+1);
     }
 
     playAudio () {

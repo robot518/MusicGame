@@ -148,21 +148,13 @@ export default class Lobby extends cc.Component {
     }
 
     showScv(){
-        // cc.sys.localStorage.setItem("level", 1);
-        var count = cc.sys.localStorage.getItem("level") || 1;
-        cc.log("count = ", count);
         var children = this.ndContent.children;
-        count = 6;
         for (let i = 0; i < 2; i++) {
             cc.find("play", children[i]).on("click", function (argument) {
                 this.playSound("click");
-                if (i < count){
-                    this._iLv = i+1;
-                    this.loadMusic();
-                    // this.loadLvScene();
-                } else {
-                    this.onWxEvent("showVideo");
-                }
+                this._iLv = i+1;
+                this.loadMusic();
+                // this.loadLvScene();
             }, this);
         };
         for (let i = 2; i < 6; i++) {
@@ -208,6 +200,8 @@ export default class Lobby extends cc.Component {
             this.labTime.node.active = false;
             //网页版去下载本地
             // remoteUrl = "../MusicGame/Lv"+this._iLv+".mp3";
+            //4399
+            remoteUrl = "./MusicGame/Lv"+this._iLv+".mp3";
             cc.loader.load({url: remoteUrl, type: "mp3"}, this.onProgress.bind(this), this.onComplete.bind(this));
         }
     }
