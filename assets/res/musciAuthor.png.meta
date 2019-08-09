@@ -1,0 +1,32 @@
+{
+  "ver": "2.3.1",
+  "uuid": "af99eae7-814b-4f04-b269-e63173fc622c",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "platformSettings": {},
+  "subMetas": {
+    "musciAuthor": {
+      "ver": "1.0.4",
+      "uuid": "6054c6c0-b158-4d8a-9e08-c0f7b856e386",
+      "rawTextureUuid": "af99eae7-814b-4f04-b269-e63173fc622c",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": -3,
+      "offsetY": 8,
+      "trimX": 0,
+      "trimY": 18,
+      "width": 101,
+      "height": 317,
+      "rawWidth": 107,
+      "rawHeight": 369,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
