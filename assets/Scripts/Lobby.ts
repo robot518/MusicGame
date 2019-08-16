@@ -249,7 +249,7 @@ export default class Lobby extends cc.Component {
         this._bLoaded = true;
         if (this._bannerAd != null) this._bannerAd.hide();
         if (this._videoAd != null) this._videoAd.offClose();
-        if (this._interstitialAd != null) this._interstitialAd.destroy();
+        if (this._interstitialAd != null && this._interstitialAd.destroy) this._interstitialAd.destroy();
         cc.director.loadScene("Level", function (err, scene) {
             var obj = scene.getChildByName("Canvas").getComponent("Level");
             obj.audioTask = res;
