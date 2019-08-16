@@ -24,6 +24,7 @@ export default class Lobby extends cc.Component {
     _videoAd: any;
     _bannerAd: any;
     _bLoaded: boolean;
+    _interstitialAd: any;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -60,14 +61,19 @@ export default class Lobby extends cc.Component {
             this.playSound("click");
             this.onWxEvent("share");
         }, this);
-        this.onWxEvent("initBanner");
-        this.onWxEvent("initVideo");
-        if (CC_WECHATGAME && cc.sys.os === cc.sys.OS_ANDROID){
-            var self = this;
-            wx.onShow(()=>{
-                // console.log("self.music.isPlaying = " + (self.music && self.music.isPlaying));
-                if (self.music) self.music.play();
-            });
+        
+        if (CC_WECHATGAME){
+            this.onWxEvent("initBanner");
+            this.onWxEvent("initVideo");
+            this.onWxEvent("initInterstitial");
+
+            if (cc.sys.os === cc.sys.OS_ANDROID){
+                var self = this;
+                wx.onShow(()=>{
+                    // console.log("self.music.isPlaying = " + (self.music && self.music.isPlaying));
+                    if (self.music) self.music.play();
+                });
+            }
         }
     }
 
@@ -144,6 +150,22 @@ export default class Lobby extends cc.Component {
                     })
                 }
                 break;
+            case "initInterstitial":
+                // 创建插屏广告实例，提前初始化
+                if (wx.createInterstitialAd){
+                    this._interstitialAd = wx.createInterstitialAd({
+                        adUnitId: 'adunit-b25f9ddef42353d0'
+                    })
+                }
+                break;
+            case "showInterstitial":
+                // 在适合的场景显示插屏广告
+                if (this._interstitialAd) {
+                    this._interstitialAd.show().catch((err) => {
+                        console.error(err)
+                    })
+                }
+                break;
         }
     }
 
@@ -183,6 +205,7 @@ export default class Lobby extends cc.Component {
             //     if (this._bLoaded == true) return;
             //     this.loadLvScene(audio);
             // });
+            if (this._interstitialAd != null) this.onWxEvent("showInterstitial");
             var self = this;
             var downTask = wx.downloadFile({
                 url: remoteUrl,
@@ -226,6 +249,7 @@ export default class Lobby extends cc.Component {
         this._bLoaded = true;
         if (this._bannerAd != null) this._bannerAd.hide();
         if (this._videoAd != null) this._videoAd.offClose();
+        if (this._interstitialAd != null) this._interstitialAd.destroy();
         cc.director.loadScene("Level", function (err, scene) {
             var obj = scene.getChildByName("Canvas").getComponent("Level");
             obj.audioTask = res;
