@@ -226,7 +226,7 @@ export default class Lobby extends cc.Component {
             //网页版去下载本地
             // remoteUrl = "../MusicGame/Lv"+this._iLv+".mp3";
             //4399
-            remoteUrl = "./MusicGame/Lv"+this._iLv+".mp3";
+            // remoteUrl = "./MusicGame/Lv"+this._iLv+".mp3";
             cc.loader.load({url: remoteUrl, type: "mp3"}, this.onProgress.bind(this), this.onComplete.bind(this));
         }
     }

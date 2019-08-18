@@ -101,7 +101,7 @@ export default class Level extends cc.Component {
                     this.checkTurnTo(pos, dx);
                 }
             }
-            // this.drawLine(cc.v2(dx, dy));
+            this.drawLine(cc.v2(dx, dy));
         }
         // if (this._bPlayTime == true){
         //     this._iTime+=dt;
@@ -209,6 +209,7 @@ export default class Level extends cc.Component {
     initShow(){
         this.ndBtn.active = true;
         this.ndResult.active = false;
+        this.ndPlayer.active = false;
         this.ndPlayer.zIndex = 1;
         this.ndLine.zIndex = 1;
     }
@@ -264,7 +265,7 @@ export default class Level extends cc.Component {
         this._speed = -this._speed;
         this.ndPlayer.scaleX = -this.ndPlayer.scaleX;
 
-        // this.record();
+        this.record();
         // this.tTime.push(this._iTime.toFixed(2));
     }
 
@@ -287,7 +288,7 @@ export default class Level extends cc.Component {
         // this._bPlayTime = true;
         // this.labTime.node.active = true;
         // cc.find("labLv", this.labTime.node).getComponent(cc.Label).string = "Lv:"+this.iLv.toString();
-        // this.record();
+        this.record();
         // this.tTime.push(0+"");
 
         // this.LvData = [[0,1],[6,7],[-5,18],[3,26],[-2,31],[3,36],[-3,42],[3,48],[0,51],[4,55],[-4,63],[4,71],[-2,77],[3,82],[-1,86],[2,89],[-1,92],[2,95],[-1,98]];
