@@ -2,6 +2,10 @@ import { GLB } from "./GLBConfig";
 
 const {ccclass, property} = cc._decorator;
 
+//测试下载音乐的速度计时用
+let bPlayTime = false;
+let iTime = 0;
+
 @ccclass
 export default class Lobby extends cc.Component {
 
@@ -27,6 +31,7 @@ export default class Lobby extends cc.Component {
     _bannerAd: any;
     _bLoaded: boolean;
     _interstitialAd: any;
+    labPlayTime: any;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -39,7 +44,12 @@ export default class Lobby extends cc.Component {
         this.initShow();
     }
 
-    // update (dt) {}
+    update (dt) {
+        if (bPlayTime){
+            iTime+=dt;
+            this.labPlayTime.string = iTime.toFixed(2);
+        }
+    }
 
     initCanvas(){
         var canvas = this.node.getComponent(cc.Canvas);
@@ -56,6 +66,7 @@ export default class Lobby extends cc.Component {
 
     initParas(){
         this._bLoaded = false;
+        this.labPlayTime = this.ndLoad.getChildByName("lab").getComponent(cc.Label);
     }
 
     initEvent(){
@@ -193,7 +204,8 @@ export default class Lobby extends cc.Component {
     loadMusic(){
         this.ndLoad.active = true;
         // var remoteUrl = "http://47.111.184.119/MusicGame/Lv"+this._iLv+".mp3";
-        var remoteUrl = "https://websocket.guanzhiwangluogongyi.vip/MusicGame/Lv"+this._iLv+".mp3";
+        var remoteUrl = "https://websocket.guanzhiwangluogongyi.vip/MusicGame/Lv"+this._iLv+".mp3"; //第一首26s
+        // var remoteUrl = "https://websocket.guanzhiwangluogongyi.vip/MusicGame/zip/Lv"+this._iLv+".mp3.zip"; //第一首26s
         if (CC_WECHATGAME) {
             // let audio = wx.createInnerAudioContext();
             // this.labTime.node.active = false;
@@ -214,11 +226,26 @@ export default class Lobby extends cc.Component {
                 audio.src = GLB.tMusic[self._iLv];
                 self.loadLvScene(audio);
             }else{
+                // bPlayTime = true;
                 var downTask = wx.downloadFile({
                     url: remoteUrl,
                     success(res){
-                        console.log("res = ", res);
+                        // console.log("res = ", res, wx.env.USER_DATA_PATH);
                         if (res.statusCode == 200){
+                            // let fileMgr = wx.getFileSystemManager();
+                            // fileMgr.unzip({
+                            //     zipFilePath: res.tempFilePath,
+                            //     targetPath: wx.env.USER_DATA_PATH,
+                            //     success(res){
+                            //         // console.log("res2 = ", res);
+                            //         GLB.tMusic[self._iLv] = res.tempFilePath;
+                            //         audio.src = res.tempFilePath;
+                            //         self.loadLvScene(audio);
+                            //     },
+                            //     fail(e){
+                            //         console.log("e = ", e);
+                            //     }
+                            // })
                             GLB.tMusic[self._iLv] = res.tempFilePath;
                             audio.src = res.tempFilePath;
                             self.loadLvScene(audio);
