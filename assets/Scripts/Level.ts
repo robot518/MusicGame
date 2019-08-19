@@ -1,5 +1,6 @@
 const {ccclass, property} = cc._decorator;
 var SPEED = 50;
+let showLine = true; //要查看graphics绘制的线，这里设置成true即可。
 
 @ccclass
 export default class Level extends cc.Component {
@@ -101,7 +102,7 @@ export default class Level extends cc.Component {
                     this.checkTurnTo(pos, dx);
                 }
             }
-            this.drawLine(cc.v2(dx, dy));
+            if (showLine) this.drawLine(cc.v2(dx, dy));
         }
         // if (this._bPlayTime == true){
         //     this._iTime+=dt;
@@ -173,6 +174,7 @@ export default class Level extends cc.Component {
     initEvent(){
         this.onWxEvent("initBanner");
         this.ndBtn.on("click", function (argument) {
+            // this.gameOver();
             if (this._gameStatus == 0)
                 this.gameStart();
             else if (this._gameStatus == 1){
@@ -209,7 +211,7 @@ export default class Level extends cc.Component {
     initShow(){
         this.ndBtn.active = true;
         this.ndResult.active = false;
-        this.ndPlayer.active = false;
+        this.ndPlayer.active = true;
         this.ndPlayer.zIndex = 1;
         this.ndLine.zIndex = 1;
     }
@@ -265,7 +267,7 @@ export default class Level extends cc.Component {
         this._speed = -this._speed;
         this.ndPlayer.scaleX = -this.ndPlayer.scaleX;
 
-        this.record();
+        if (showLine) this.record();
         // this.tTime.push(this._iTime.toFixed(2));
     }
 
@@ -288,7 +290,10 @@ export default class Level extends cc.Component {
         // this._bPlayTime = true;
         // this.labTime.node.active = true;
         // cc.find("labLv", this.labTime.node).getComponent(cc.Label).string = "Lv:"+this.iLv.toString();
-        this.record();
+        if (showLine) {
+            this.record();
+            this.ndPlayer.active = false;
+        }
         // this.tTime.push(0+"");
 
         // this.LvData = [[0,1],[6,7],[-5,18],[3,26],[-2,31],[3,36],[-3,42],[3,48],[0,51],[4,55],[-4,63],[4,71],[-2,77],[3,82],[-1,86],[2,89],[-1,92],[2,95],[-1,98]];

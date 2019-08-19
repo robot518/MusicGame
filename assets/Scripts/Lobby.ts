@@ -1,3 +1,5 @@
+import { GLB } from "./GLBConfig";
+
 const {ccclass, property} = cc._decorator;
 
 @ccclass
@@ -206,21 +208,27 @@ export default class Lobby extends cc.Component {
             //     this.loadLvScene(audio);
             // });
             if (this._interstitialAd != null) this.onWxEvent("showInterstitial");
-            var self = this;
-            var downTask = wx.downloadFile({
-                url: remoteUrl,
-                success(res){
-                    console.log("res = ", res);
-                    if (res.statusCode == 200){
-                        let audio = wx.createInnerAudioContext();
-                        audio.src = res.tempFilePath;
-                        self.loadLvScene(audio);
+            let self = this;
+            let audio = wx.createInnerAudioContext();
+            if (GLB.tMusic[self._iLv]){
+                audio.src = GLB.tMusic[self._iLv];
+                self.loadLvScene(audio);
+            }else{
+                var downTask = wx.downloadFile({
+                    url: remoteUrl,
+                    success(res){
+                        console.log("res = ", res);
+                        if (res.statusCode == 200){
+                            GLB.tMusic[self._iLv] = res.tempFilePath;
+                            audio.src = res.tempFilePath;
+                            self.loadLvScene(audio);
+                        }
                     }
-                }
-            })
-            downTask.onProgressUpdate((res)=>{
-                this.labTime.string = res.progress.toString()+"%";
-            })
+                })
+                downTask.onProgressUpdate((res)=>{
+                    this.labTime.string = res.progress.toString()+"%";
+                })
+            }
         }else {
             this.labTime.node.active = false;
             //网页版去下载本地
