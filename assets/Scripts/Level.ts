@@ -373,8 +373,8 @@ export default class Level extends cc.Component {
             this._tiledMap = tileMap;
             this._layerFloor = this._tiledMap.getLayer("floor");
             this._ndMap = node;
-            node.active = false;
-            this._ndMap.active = false;
+            // node.active = false;
+            // this._ndMap.active = false;
             this.showBg();
             var mapSize = this._ndMap.getContentSize();
             var tileSize = this._tiledMap.getTileSize();
