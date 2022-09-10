@@ -1,15 +1,21 @@
 {
-  "ver": "2.3.1",
+  "ver": "2.3.7",
   "uuid": "af99eae7-814b-4f04-b269-e63173fc622c",
+  "importer": "texture",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 107,
+  "height": 369,
   "platformSettings": {},
   "subMetas": {
     "musciAuthor": {
-      "ver": "1.0.4",
+      "ver": "1.0.6",
       "uuid": "6054c6c0-b158-4d8a-9e08-c0f7b856e386",
+      "importer": "sprite-frame",
       "rawTextureUuid": "af99eae7-814b-4f04-b269-e63173fc622c",
       "trimType": "auto",
       "trimThreshold": 1,

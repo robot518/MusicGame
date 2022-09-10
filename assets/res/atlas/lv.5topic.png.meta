@@ -1,15 +1,21 @@
 {
-  "ver": "2.3.1",
+  "ver": "2.3.7",
   "uuid": "9628e79d-3964-44e0-9ae9-746256b54d2a",
+  "importer": "texture",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 92,
+  "height": 41,
   "platformSettings": {},
   "subMetas": {
     "lv.5topic": {
-      "ver": "1.0.4",
+      "ver": "1.0.6",
       "uuid": "9cca7f24-6063-4019-a216-b403b5756b45",
+      "importer": "sprite-frame",
       "rawTextureUuid": "9628e79d-3964-44e0-9ae9-746256b54d2a",
       "trimType": "auto",
       "trimThreshold": 1,

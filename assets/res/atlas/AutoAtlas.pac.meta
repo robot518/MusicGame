@@ -1,9 +1,11 @@
 {
-  "ver": "1.2.0",
+  "ver": "1.2.5",
   "uuid": "51c86ea2-6147-446f-9ef7-d84ffc9505f6",
+  "importer": "auto-atlas",
   "maxWidth": 1024,
   "maxHeight": 1024,
   "padding": 2,
+  "compressionLevel": 6,
   "allowRotation": true,
   "forceSquared": false,
   "powerOfTwo": false,
@@ -12,7 +14,10 @@
   "quality": 80,
   "contourBleed": true,
   "paddingBleed": true,
-  "filterUnused": false,
+  "filterUnused": true,
+  "packable": false,
+  "premultiplyAlpha": false,
+  "filterMode": "bilinear",
   "platformSettings": {
     "default": {
       "formats": [
