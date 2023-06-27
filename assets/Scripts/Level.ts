@@ -83,7 +83,7 @@ export default class Level extends cc.Component {
             this._ndMap.parent.x -= dx;
             this._ndMap.parent.y -= dy;
             var pos = this._bMove == true ? this._getTilePos(cc.v2(this.ndPlayer.x, this.ndPlayer.y)) : this._getTilePos(cc.v2(this._vDesPos.x, this._vDesPos.y));
-            if (CC_WECHATGAME){
+            if (cc.sys.platform === cc.sys.WECHAT_GAME){
                 this.checkTurnTo(pos, dx);
             }else{
                 if (this.iLv == 1 && pos.x == 65 && pos.y == 27) {
@@ -316,11 +316,13 @@ export default class Level extends cc.Component {
     }
 
     playAudio () {
-        if (CC_WECHATGAME){
-            this.audioTask.play();
-            // this.audioTask.volume = 1;
-        }else{
-            this._audioID = cc.audioEngine.play(this.audioTask, false, 1);
+        if (this.audioTask){
+            if (CC_WECHATGAME){
+                this.audioTask.play();
+                // this.audioTask.volume = 1;
+            }else{
+                this._audioID = cc.audioEngine.play(this.audioTask, false, 1);
+            }
         }
     }
 

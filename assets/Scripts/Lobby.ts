@@ -70,24 +70,9 @@ export default class Lobby extends cc.Component {
     }
 
     initEvent(){
-        cc.find("share", this.node).on("click", function (argument) {
-            this.playSound("click");
-            this.onWxEvent("share");
-        }, this);
-        
-        if (CC_WECHATGAME){
-            this.onWxEvent("initBanner");
-            this.onWxEvent("initVideo");
-            this.onWxEvent("initInterstitial");
-
-            if (cc.sys.os === cc.sys.OS_ANDROID){
-                var self = this;
-                wx.onShow(()=>{
-                    // console.log("self.music.isPlaying = " + (self.music && self.music.isPlaying));
-                    if (self.music) self.music.play();
-                });
-            }
-        }
+        // cc.find("share", this.node).on("click", function (argument) {
+        //     this.playSound("click");
+        // }, this);
     }
 
     initShow(){
@@ -96,107 +81,21 @@ export default class Lobby extends cc.Component {
         if (!CC_WECHATGAME) cc.find("share", this.node).active = false;
     }
 
-    onWxEvent(s){
-        if (!CC_WECHATGAME) return;
-        let self = this;
-        switch(s){
-            case "initBanner":
-                if (this._bannerAd != null) this._bannerAd.show();
-                else{
-                    var systemInfo = wx.getSystemInfoSync();
-                    this._bannerAd = wx.createBannerAd({
-                        adUnitId: 'adunit-92462c04a69b2dc5',
-                        adIntervals: 30,
-                        style: {
-                            left: 0,
-                            top: systemInfo.windowHeight - 144,
-                            width: 720,
-                        }
-                    });
-                    this._bannerAd.onResize(res => {
-                        if (self._bannerAd != null)
-                            self._bannerAd.style.top = systemInfo.windowHeight - self._bannerAd.style.realHeight;
-                    })
-                    this._bannerAd.show();
-                    this._bannerAd.onError(err => {
-                        console.log(err);
-                        //无合适广告
-                        if (err.errCode == 1004){
-
-                        }
-                    })
-                }
-                break;
-            case "initVideo":
-                if (this._videoAd == null){
-                    this._videoAd = wx.createRewardedVideoAd({
-                        adUnitId: 'adunit-bfb7593ec3f884b7'
-                    });
-                    this._videoAd.onClose(res => {
-                        if (res && res.isEnded || res === undefined){
-                            self._videoAd.offClose();
-                            self.loadMusic();
-                        }else{
-    
-                        }
-                    });
-                    this._videoAd.onError(err => {
-                      console.log(err)
-                    });
-                }
-                break;
-            case "share":
-                wx.shareAppMessage({
-                    title: "你来挑战我啊！",
-                    imageUrl: canvas.toTempFilePathSync({
-                        destWidth: 500,
-                        destHeight: 400
-                    })
-                });
-                break;
-            case "showVideo":
-                if (self._videoAd != null){
-                    self._videoAd.show()
-                    .catch(err => {
-                        self._videoAd.load()
-                        .then(() => self._videoAd.show())
-                    })
-                }
-                break;
-            case "initInterstitial":
-                // 创建插屏广告实例，提前初始化
-                if (wx.createInterstitialAd){
-                    this._interstitialAd = wx.createInterstitialAd({
-                        adUnitId: 'adunit-b25f9ddef42353d0'
-                    })
-                }
-                break;
-            case "showInterstitial":
-                // 在适合的场景显示插屏广告
-                if (this._interstitialAd) {
-                    this._interstitialAd.show().catch((err) => {
-                        console.error(err)
-                    })
-                }
-                break;
-        }
-    }
-
     showScv(){
         var children = this.ndContent.children;
         for (let i = 0; i < 2; i++) {
             cc.find("play", children[i]).on("click", function (argument) {
                 this.playSound("click");
                 this._iLv = i+1;
-                this.loadMusic();
-                // this.loadLvScene();
+                // this.loadMusic();
+                this.loadLvScene();
             }, this);
         };
         for (let i = 2; i < 6; i++) {
             cc.find("play", children[i]).on("click", function (argument) {
                 this._iLv = i+1;
                 this.playSound("click");
-                this.onWxEvent("showVideo");
+                // this.onWxEvent("showVideo");
             }, this);
         };
     }
@@ -292,7 +191,7 @@ export default class Lobby extends cc.Component {
             var url = 'map/Lv'+lv;
             // var url = "map/Lv"+this.iLv;
             obj.onCreateTileMap(url);
-            if (res.offCanplay) res.offCanplay();
+            if (res && res.offCanplay) res.offCanplay();
         });
     }
 
